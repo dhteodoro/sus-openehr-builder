@@ -1,0 +1,116 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-EVALUATION.bariatric_surgery_evaluation.v1
+
+concept
+	[at0000]	-- Bariatric surgery evaluation
+language
+	original_language = <[ISO_639-1::pt-br]>
+	translations = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			author = <
+				["organisation"] = <"UERJ - Universidade do Estado do Rio de Janeiro">
+				["name"] = <"Sergio Miranda Freire">
+			>
+		>
+	>
+description
+	original_author = <
+		["name"] = <"Sergio Miranda Freire">
+	>
+	details = <
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Armazenar dados relativos à cirurgia bariátrica.">
+			use = <"">
+			misuse = <"">
+			copyright = <"">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To store data about bariatric surgery">
+			use = <"">
+			misuse = <"">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"0">
+	other_contributors = <>
+	other_details = <>
+
+definition
+	EVALUATION[at0000] matches {	-- Bariatric surgery evaluation
+		data matches {
+			ITEM_TREE[at0001] matches {	-- Tree
+				items cardinality matches {0..*; unordered} matches {
+					ELEMENT[at0002] occurrences matches {0..1} matches {	-- duration of follow-up (months)
+						value matches {
+							DV_COUNT matches {*}
+						}
+					}
+					ELEMENT[at0003] occurrences matches {0..1} matches {	-- Baros score
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					ELEMENT[at0004] occurrences matches {0..1} matches {	-- Baros table
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["pt-br"] = <
+			items = <
+				["at0000"] = <
+					text = <"Avaliação da cirurgia bariátrica">
+					description = <"">
+				>
+				["at0001"] = <
+					text = <"Componentes">
+					description = <"">
+				>
+				["at0002"] = <
+					text = <"duração do acompanhamento (meses)">
+					description = <"*">
+				>
+				["at0003"] = <
+					text = <"Escore de Baros">
+					description = <"*">
+				>
+				["at0004"] = <
+					text = <"tabela de Baros">
+					description = <"*">
+				>
+			>
+		>
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Bariatric surgery evaluation">
+					description = <"">
+				>
+				["at0001"] = <
+					text = <"Components">
+					description = <"">
+				>
+				["at0002"] = <
+					text = <"duration of follow-up (months)">
+					description = <"*">
+				>
+				["at0003"] = <
+					text = <"Baros score">
+					description = <"*">
+				>
+				["at0004"] = <
+					text = <"Baros table">
+					description = <"*">
+				>
+			>
+		>
+	>

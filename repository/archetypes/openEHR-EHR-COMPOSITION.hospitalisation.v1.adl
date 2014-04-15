@@ -1,0 +1,150 @@
+﻿archetype (adl_version=1.4)
+	openEHR-EHR-COMPOSITION.hospitalisation.v1
+
+concept
+	[at0000]	-- Hospitalisation
+language
+	original_language = <[ISO_639-1::pt-br]>
+	translations = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			author = <
+				["organisation"] = <"UERJ - Universidade do Estado do Rio de Janeiro">
+				["name"] = <"Sergio Miranda Freire">
+			>
+		>
+	>
+description
+	original_author = <
+		["name"] = <"Sergio Miranda Freire">
+		["organisation"] = <"Universidade do Estado do Rio de Janeiro">
+		["email"] = <"sergio@lampada.uerj.br">
+		["date"] = <"01/02/2013">
+	>
+	details = <
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Registro de dados sobre hospitalizações no SUS.">
+			use = <"Este é um arquétipo elaborado para fins de pesquisa e somente deve ser utilizado em seu âmbito.">
+			misuse = <"Não deve ser utilizado em nenhum sistema de informação real. Outros projetos de pesquisa devem utilizá-lo após cuidadoso escrutínio. ">
+			copyright = <"">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Register information about hospitalisations in the Brazilian Public Health Care System.">
+			use = <"This is an archetype created for research purposes only.">
+			misuse = <"It should not be use in any information system.">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"0">
+	other_contributors = <>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"06F49D75615613ABA1E98A377F15A552">
+	>
+
+definition
+	COMPOSITION[at0000] matches {	-- Hospitalisation
+		category matches {
+			DV_CODED_TEXT matches {
+				defining_code matches {[openehr::433]}
+			}
+		}
+		context matches {
+			EVENT_CONTEXT matches {
+				other_context matches {
+					ITEM_TREE[at0001] matches {*}
+				}
+			}
+		}
+		content cardinality matches {1..*; unordered} matches {
+			allow_archetype ADMIN_ENTRY[at0007] occurrences matches {0..*} matches {	-- administrative data
+				include
+					archetype_id/value matches {/openEHR-EHR-ADMIN_ENTRY\.occupational_hazard_communication(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-ADMIN_ENTRY\.admission(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-ADMIN_ENTRY\.hospitalization_authorization(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-ADMIN_ENTRY\.patient_discharge(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			allow_archetype EVALUATION[at0009] occurrences matches {0..*} matches {	-- diagnosis
+				include
+					archetype_id/value matches {/openEHR-EHR-EVALUATION\.problem_diagnosis-sus(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			allow_archetype INSTRUCTION[at0010] occurrences matches {0..*} matches {	-- requests
+				include
+					archetype_id/value matches {/openEHR-EHR-INSTRUCTION\.request-procedure(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			allow_archetype ACTION[at0011] occurrences matches {0..*} matches {	-- procedures
+				include
+					archetype_id/value matches {/openEHR-EHR-ACTION\.procedure-sus(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			allow_archetype OBSERVATION[at0012] occurrences matches {0..*} matches {	-- observations
+				include
+					archetype_id/value matches {/openEHR-EHR-OBSERVATION\.menstruation(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["pt-br"] = <
+			items = <
+				["at0000"] = <
+					text = <"Hospitalização">
+					description = <"Hospitalização">
+				>
+				["at0001"] = <
+					text = <"Componentes">
+					description = <"Componentes">
+				>
+				["at0007"] = <
+					text = <"dados administrativos">
+					description = <"*">
+				>
+				["at0009"] = <
+					text = <"diagnóstico">
+					description = <"*">
+				>
+				["at0010"] = <
+					text = <"solicitações">
+					description = <"*">
+				>
+				["at0011"] = <
+					text = <"procedimentos">
+					description = <"*">
+				>
+				["at0012"] = <
+					text = <"observações">
+					description = <"*">
+				>
+			>
+		>
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Hospitalisation">
+					description = <"Hospitalisation">
+				>
+				["at0001"] = <
+					text = <"Components">
+					description = <"Components">
+				>
+				["at0007"] = <
+					text = <"administrative data">
+					description = <"*">
+				>
+				["at0009"] = <
+					text = <"diagnosis">
+					description = <"*">
+				>
+				["at0010"] = <
+					text = <"requests">
+					description = <"*">
+				>
+				["at0011"] = <
+					text = <"procedures">
+					description = <"*">
+				>
+				["at0012"] = <
+					text = <"observations">
+					description = <"*">
+				>
+			>
+		>
+	>

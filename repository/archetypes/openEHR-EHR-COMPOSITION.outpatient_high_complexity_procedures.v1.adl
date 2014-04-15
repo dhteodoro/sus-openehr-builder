@@ -1,0 +1,119 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-COMPOSITION.outpatient_high_complexity_procedures.v1
+
+concept
+	[at0000]	-- Outpatient high complexity procedures
+language
+	original_language = <[ISO_639-1::pt-br]>
+	translations = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			author = <
+				["organisation"] = <"UERJ - Universidade do Estado do Rio de Janeiro">
+				["name"] = <"Sergio Miranda Freire">
+			>
+		>
+	>
+description
+	original_author = <
+		["name"] = <"Sergio Miranda Freire">
+	>
+	details = <
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Composição de registros de dados da APAC">
+			use = <"">
+			misuse = <"">
+			copyright = <"">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record composed data of a high complexity procedure">
+			use = <"">
+			misuse = <"">
+			copyright = <"">
+		>
+	>	
+	lifecycle_state = <"0">
+	other_contributors = <>
+	other_details = <
+	>
+
+definition
+	COMPOSITION[at0000] matches {	-- Outpatient high complexity procedures
+		category matches {
+			DV_CODED_TEXT matches {
+				defining_code matches {[openehr::433]}
+			}
+		}
+		content cardinality matches {1..*; unordered} matches {
+			allow_archetype ADMIN_ENTRY[at0001] occurrences matches {0..*} matches {	-- administrative data
+				include
+					archetype_id/value matches {/openEHR-EHR-ADMIN_ENTRY\.high_complexity_procedures_sus(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-ADMIN_ENTRY\.patient_discharge(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			allow_archetype EVALUATION[at0002] occurrences matches {0..*} matches {	-- evaluation
+				include
+					archetype_id/value matches {/openEHR-EHR-EVALUATION\.problem_diagnosis-sus(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-EVALUATION\.bariatric_surgery_evaluation(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			allow_archetype ACTION[at0003] occurrences matches {0..*} matches {	-- procedure
+				include
+					archetype_id/value matches {/openEHR-EHR-ACTION\.procedure-sus(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			allow_archetype OBSERVATION[at0004] occurrences matches {0..*} matches {	-- observations
+				include
+					archetype_id/value matches {/openEHR-EHR-OBSERVATION\.body_mass_index(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-OBSERVATION\.body_weight(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-OBSERVATION\.height(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-OBSERVATION\.lab_test-hba1c(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-OBSERVATION\.lab_test-blood_glucose(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-OBSERVATION\.lab_test-antigen_antibody_sus(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-OBSERVATION\.lab_test-liver_function(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-OBSERVATION\.lab_test-urea_and_electrolytes-sus(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-OBSERVATION\.bodily_output-urination(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["pt-br"] = <
+			items = <
+				["at0000"] = <
+					text = <"procedimentos ambulatoriais de alta complexidade">
+					description = <"">
+				>
+				["at0001"] = <
+					text = <"dados administrativos">
+					description = <"*">
+				>
+				["at0002"] = <
+					text = <"avaliação">
+					description = <"*">
+				>
+				["at0003"] = <
+					text = <"procedimento">
+					description = <"*">
+				>
+				["at0004"] = <
+					text = <"observações">
+					description = <"*">
+				>
+			>
+		>
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Outpatient high complexity procedures">
+					description = <"">
+				>
+				["at0001"] = <
+					text = <"administrative data">
+					description = <"*">
+				>
+				["at0002"] = <
+					text = <"evaluation">
+					description = <"*">
+				>
+				["at0003"] = <
+					text = <"procedure">
+					description = <"*">
+				>
+				["at0004"] = <
+					text = <"observations">
+					description = <"*">
+				>
+			>
+		>
+	>

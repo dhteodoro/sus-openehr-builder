@@ -1,0 +1,178 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-ADMIN_ENTRY.occupational_hazard_communication.v1
+
+concept
+	[at0000]	-- Comunicacao de acidente de trabalho
+language
+	original_language = <[ISO_639-1::pt-br]>
+	translations = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			author = <
+				["name"] = <"Sergio Miranda Freire">
+			>
+		>
+	>
+description
+	original_author = <
+		["name"] = <"Luciana Tricai Cavalini">
+		["organisation"] = <"Universidade do Estado do Rio de Janeiro">
+		["email"] = <"lutricav@lampada.uerj.br">
+		["date"] = <"04/11/2012">
+	>
+	details = <
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Registro dos dados de Comunicação de Acidente de Trabalho (CAT) da Autorização de Internação Hospitalar (AIH) que não constam dos arquétipos do CKM">
+			use = <"Este é um arquétipo elaborado para fins de pesquisa e somente deve ser utilizado em seu âmbito.">
+			misuse = <"Não deve ser utilizado em nenhum sistema de informação real. Outros projetos de pesquisa devem utilizá-lo após cuidadoso escrutínio. ">
+			copyright = <"">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the data for the communication of a work hazard in the patient hospitalisation which is not in the CKM archetype for hospital admission.">
+			use = <"This is an archetype created for research purposes only.">
+			misuse = <"It should not be use in any information system.">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"Initial">
+	other_contributors = <>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"649D411B38CDC21FB8BA5CA8AF7C6257">
+	>
+
+definition
+	ADMIN_ENTRY[at0000] matches {	-- Comunicacao de acidente de trabalho
+		data matches {
+			ITEM_TREE[at0001] matches {	-- Components
+				items cardinality matches {0..*; unordered} matches {
+					ELEMENT[at0003] occurrences matches {0..1} matches {	-- CBOR
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					ELEMENT[at0004] occurrences matches {0..1} matches {	-- CNAER
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					ELEMENT[at0005] occurrences matches {0..1} matches {	-- Vínculo com Previdência
+						value matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {
+									[local::
+									at0006, 	-- 1
+									at0007, 	-- 2
+									at0008, 	-- 3
+									at0009, 	-- 4
+									at0010, 	-- 5
+									at0011]	-- 6
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["pt-br"] = <
+			items = <
+				["at0000"] = <
+					text = <"Comunicacao de acidente de trabalho">
+					description = <"Arquétipo elaborado para registrar os dados de Comunicação de Acidente de Trabalho (CAT) da Autorização de Internação Hospitalar (AIH) que não constam dos arquétipos do CKM">
+				>
+				["at0001"] = <
+					text = <"Componentes">
+					description = <"Componentes">
+				>
+				["at0003"] = <
+					text = <"CBOR">
+					description = <"Código Brasileiro de Ocupação reduzido (CBOR) com 3 dígitos">
+				>
+				["at0004"] = <
+					text = <"CNAER">
+					description = <"Código Nacional de Atividade Econômica com 3 dígitos">
+				>
+				["at0005"] = <
+					text = <"Vínculo com Previdência">
+					description = <"Vínculo do acidentado com a Previdência Social">
+				>
+				["at0006"] = <
+					text = <"1">
+					description = <"Autônomo">
+				>
+				["at0007"] = <
+					text = <"2">
+					description = <"Desempregado">
+				>
+				["at0008"] = <
+					text = <"3">
+					description = <"Aposentado">
+				>
+				["at0009"] = <
+					text = <"4">
+					description = <"Não Segurado">
+				>
+				["at0010"] = <
+					text = <"5">
+					description = <"Empregado">
+				>
+				["at0011"] = <
+					text = <"6">
+					description = <"Empregador">
+				>
+			>
+		>
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Communication of a work hazard">
+					description = <"Data for the communication of a work hazard">
+				>
+				["at0001"] = <
+					text = <"Components">
+					description = <"Components">
+				>
+				["at0003"] = <
+					text = <"occupational code">
+					description = <"Brazilian occupational code (reduced) with 3 digits">
+				>
+				["at0004"] = <
+					text = <"CNAER">
+					description = <"Brazilian code of economic activity with 3 digits">
+				>
+				["at0005"] = <
+					text = <"Link with the Public Insurance System">
+					description = <"Link with the Public Insurance System">
+				>
+				["at0006"] = <
+					text = <"1">
+					description = <"Autonomous">
+				>
+				["at0007"] = <
+					text = <"2">
+					description = <"Unemployed">
+				>
+				["at0008"] = <
+					text = <"3">
+					description = <"Retired">
+				>
+				["at0009"] = <
+					text = <"4">
+					description = <"Uninsured">
+				>
+				["at0010"] = <
+					text = <"5">
+					description = <"Employee">
+				>
+				["at0011"] = <
+					text = <"6">
+					description = <"Employer">
+				>
+			>
+		>
+	>

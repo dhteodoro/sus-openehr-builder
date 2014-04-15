@@ -1,0 +1,84 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-COMPOSITION.demographic_data.v1
+
+concept
+	[at0000]	-- Demographic data
+language
+	original_language = <[ISO_639-1::pt-br]>
+	translations = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			author = <
+				["organisation"] = <"UERJ - Universidade do Estado do Rio de Janeiro">
+				["name"] = <"Sergio Miranda Freire">
+			>
+		>
+	>
+description
+	original_author = <
+		["name"] = <"Sergio Miranda Freire">
+	>
+	details = <
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Composição de dados demográficos.">
+			use = <"">
+			misuse = <"">
+			copyright = <"">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Demographic data composition.">
+			use = <"">
+			misuse = <"">
+			copyright = <"">
+		>
+	>	
+	lifecycle_state = <"0">
+	other_contributors = <>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"012CF86C5D463EFE1C6A446DD86B6E49">
+	>
+
+definition
+	COMPOSITION[at0000] matches {	-- Demographic data
+		category matches {
+			DV_CODED_TEXT matches {
+				defining_code matches {[openehr::433]}
+			}
+		}
+		content cardinality matches {0..*; unordered} matches {
+			allow_archetype ADMIN_ENTRY[at0001] occurrences matches {0..*} matches {	-- patient demographic data
+				include
+					archetype_id/value matches {/openEHR-EHR-ADMIN_ENTRY\.demographic_data(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["pt-br"] = <
+			items = <
+				["at0000"] = <
+					text = <"dados demográficos">
+					description = <"unknown">
+				>
+				["at0001"] = <
+					text = <"dados demográficos do paciente">
+					description = <"*">
+				>
+			>
+		>
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Demographic data">
+					description = <"">
+				>
+				["at0001"] = <
+					text = <"patient demographic data">
+					description = <"*">
+				>
+			>
+		>
+	>

@@ -1,0 +1,259 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-ADMIN_ENTRY.demographic_data.v1
+
+concept
+	[at0000]	-- Demographic data
+language
+	original_language = <[ISO_639-1::pt-br]>
+	translations = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			author = <
+				["organisation"] = <"UERJ - Universidade do Estado do Rio de Janeiro">
+				["name"] = <"Sergio Miranda Freire">
+			>
+		>
+	>
+description
+	original_author = <
+		["name"] = <"Sergio Miranda Freire">
+	>
+	details = <
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Armazenar dados demográficos do paciente.">
+			use = <"">
+			misuse = <"">
+			copyright = <"">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To store patient demographic data.">
+			use = <"">
+			misuse = <"">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"0">
+	other_contributors = <>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"067C3DB182A92C07A3D93C3E7B356D6A">
+	>
+
+definition
+	ADMIN_ENTRY[at0000] matches {	-- Demographic data
+		data matches {
+			ITEM_TREE[at0001] matches {	-- components
+				items cardinality matches {0..*; unordered} matches {
+					ELEMENT[at0002] occurrences matches {0..1} matches {	-- birth date
+						value matches {
+							DV_DATE matches {
+								value matches {yyyy-mm-dd}
+							}
+						}
+					}
+					ELEMENT[at0003] occurrences matches {0..1} matches {	-- gender
+						value matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {
+									[local::
+									at0009, 	-- male
+									at0010]	-- female
+								}
+							}
+						}
+					}
+					ELEMENT[at0004] occurrences matches {0..1} matches {	-- race
+						value matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {[ac0004]}		-- code for race
+							}
+						}
+					}
+					ELEMENT[at0005] occurrences matches {0..1} matches {	-- ethnic group
+						value matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {[ac0003]}		-- code for ethnic group
+							}
+						}
+					}
+					ELEMENT[at0006] occurrences matches {0..1} matches {	-- death indicator
+						value matches {
+							DV_BOOLEAN matches {
+								value matches {True, False}
+							}
+						}
+					}
+					ELEMENT[at0011] occurrences matches {0..1} matches {	-- death date
+						value matches {
+							DV_DATE matches {*}
+						}
+					}
+					ELEMENT[at0007] occurrences matches {0..1} matches {	-- educational level
+						value matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {[ac0002]}		-- code for educational level
+							}
+						}
+					}
+					ELEMENT[at0008] occurrences matches {0..1} matches {	-- nationality
+						value matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {[ac0001]}		-- code for nationality
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["pt-br"] = <
+			items = <
+				["at0000"] = <
+					text = <"dados demográficos">
+					description = <"dados demográficos">
+				>
+				["at0001"] = <
+					text = <"componentes">
+					description = <"components">
+				>
+				["at0002"] = <
+					text = <"data de nascimento">
+					description = <"data de nascimento">
+				>
+				["at0003"] = <
+					text = <"gênero">
+					description = <"gênero">
+				>
+				["at0004"] = <
+					text = <"raça">
+					description = <"raça">
+				>
+				["at0005"] = <
+					text = <"grupo étnico">
+					description = <"grupo étnico">
+				>
+				["at0006"] = <
+					text = <"indicador de óbito">
+					description = <"indicador de óbito">
+				>
+				["at0007"] = <
+					text = <"nível educacional">
+					description = <"nível educacional">
+				>
+				["at0008"] = <
+					text = <"nacionalidade">
+					description = <"nacionalidade">
+				>
+				["at0009"] = <
+					text = <"masculino">
+					description = <"masculino">
+				>
+				["at0010"] = <
+					text = <"feminino">
+					description = <"feminino">
+				>
+				["at0011"] = <
+					text = <"data de óbito">
+					description = <"data de óbito">
+				>
+			>
+		>
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Demographic data">
+					description = <"demographic data">
+				>
+				["at0001"] = <
+					text = <"components">
+					description = <"components">
+				>
+				["at0002"] = <
+					text = <"birth date">
+					description = <"birth date">
+				>
+				["at0003"] = <
+					text = <"gender">
+					description = <"gender">
+				>
+				["at0004"] = <
+					text = <"race">
+					description = <"race">
+				>
+				["at0005"] = <
+					text = <"ethnic group">
+					description = <"ethnic group">
+				>
+				["at0006"] = <
+					text = <"death indicator">
+					description = <"death indicator">
+				>
+				["at0007"] = <
+					text = <"educational level">
+					description = <"educational level">
+				>
+				["at0008"] = <
+					text = <"nationality">
+					description = <"nationality">
+				>
+				["at0009"] = <
+					text = <"male">
+					description = <"male">
+				>
+				["at0010"] = <
+					text = <"female">
+					description = <"female">
+				>
+				["at0011"] = <
+					text = <"death date">
+					description = <"death date">
+				>
+			>
+		>
+	>
+	constraint_definitions = <
+		["pt-br"] = <
+			items = <
+				["ac0001"] = <
+					text = <"código da nacionalidade">
+					description = <"código da nacionalidade">
+				>
+				["ac0002"] = <
+					text = <"código do nível educacional">
+					description = <"código do nível educacional">
+				>
+				["ac0003"] = <
+					text = <"código do grupo étnico">
+					description = <"código do grupo étnico">
+				>
+				["ac0004"] = <
+					text = <"código da raça">
+					description = <"código da raça">
+				>
+			>
+		>
+		["en"] = <
+			items = <
+				["ac0001"] = <
+					text = <"nationality code">
+					description = <"nationality code">
+				>
+				["ac0002"] = <
+					text = <"code for educational level">
+					description = <"code for educational level">
+				>
+				["ac0003"] = <
+					text = <"code for ethnic group">
+					description = <"code for ethnic group">
+				>
+				["ac0004"] = <
+					text = <"race code">
+					description = <"race code">
+				>
+			>
+		>
+	>

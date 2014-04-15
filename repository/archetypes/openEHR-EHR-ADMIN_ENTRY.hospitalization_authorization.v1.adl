@@ -1,0 +1,156 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-ADMIN_ENTRY.hospitalization_authorization.v1
+
+concept
+	[at0000]	-- Autorizacao de internacao hospitalar
+language
+	original_language = <[ISO_639-1::pt-br]>
+	translations = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			author = <
+				["organisation"] = <"UERJ - Universidade do Estado do Rio de Janeiro">
+				["name"] = <"Sergio Miranda Freire">
+			>
+		>
+	>
+description
+	original_author = <
+		["name"] = <"Luciana Tricai Cavalini">
+		["organisation"] = <"Universidade do Estado do Rio de Janeiro">
+		["email"] = <"lutricav@lampada.uerj.br">
+		["date"] = <"01/10/2012">
+	>
+	details = <
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Registro dos dados administrativos do SIH-SUS que não constavam do CKM">
+			use = <"Este é um arquétipo elaborado para fins de pesquisa e somente deve ser utilizado em seu âmbito.">
+			misuse = <"Não deve ser utilizado em nenhum sistema de informação real. Outros projetos de pesquisa devem utilizá-lo após cuidadoso escrutínio. ">
+			copyright = <"">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the data for the patient hospitalisation which is not in the CKM archetype.">
+			use = <"This is an archetype created for research purposes only.">
+			misuse = <"It should not be use in any information system.">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"Initial">
+	other_contributors = <"Sergio Miranda Freire", ...>
+	other_details = <
+		["references"] = <"MINISTÉRIO DA SAÚDE. Secretaria de Atenção à Saúde - SAS. Departamento de Regulação, Avaliação e Controle - DRAC. Coordenação-Geral de Sistemas de Informação - CGSI. Manual do Sistema de Informações Hospitalares do SUS (SIH/SUS). Brasília: Ministério da Saúde, 2005.">
+		["MD5-CAM-1.0.1"] = <"1901C5ACD72FF4AE7F8472614409200C">
+	>
+
+definition
+	ADMIN_ENTRY[at0000] matches {	-- Autorizacao de internacao hospitalar
+		data matches {
+			ITEM_TREE[at0001] matches {	-- Componentes
+				items cardinality matches {0..*; unordered} matches {
+					ELEMENT[at0061] occurrences matches {0..1} matches {	-- Data da emissão
+						value matches {
+							DV_DATE matches {*}
+						}
+					}
+					ELEMENT[at0013] occurrences matches {0..1} matches {	-- Mês inicial - UTI
+						value matches {
+							DV_COUNT matches {
+								magnitude matches {|0..31|}
+							}
+						}
+					}
+					ELEMENT[at0014] occurrences matches {0..1} matches {	-- Mês anterior - UTI
+						value matches {
+							DV_COUNT matches {
+								magnitude matches {|0..31|}
+							}
+						}
+					}
+					ELEMENT[at0015] occurrences matches {0..1} matches {	-- Mês alta - UTI
+						value matches {
+							DV_COUNT matches {
+								magnitude matches {|0..31|}
+							}
+						}
+					}
+					ELEMENT[at0016] occurrences matches {0..1} matches {	-- Total - UTI
+						value matches {
+							DV_COUNT matches {
+								magnitude matches {|0..99|}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["pt-br"] = <
+			items = <
+				["at0000"] = <
+					text = <"Autorizacao de internacao hospitalar">
+					description = <"Arquétipo elaborado para registrar os dados administrativos do SIH-SUS que não constavam do CKM">
+				>
+				["at0001"] = <
+					text = <"Componentes">
+					description = <"componentes">
+				>
+				["at0013"] = <
+					text = <"Mês inicial - UTI">
+					description = <"Número de dias de UTI (nível I) utilizados no mês da internação">
+				>
+				["at0014"] = <
+					text = <"Mês anterior - UTI">
+					description = <"Número de dias de UTI (nível I) utilizados no mês anterior à alta">
+				>
+				["at0015"] = <
+					text = <"Mês alta - UTI">
+					description = <"Número de dias de UTI (nível I) utilizados no mês da alta, óbito ou transferência">
+				>
+				["at0016"] = <
+					text = <"Total - UTI">
+					description = <"Número total de dias de UTI (nível I) utilizados">
+				>
+				["at0061"] = <
+					text = <"Data da emissão">
+					description = <"Data da emissão da AIH">
+				>
+			>
+		>
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Authorization for hospital admission">
+					description = <"Data for the authorization for hospital admission which is not in the admission archetype">
+				>
+				["at0001"] = <
+					text = <"Components">
+					description = <"components">
+				>
+				["at0013"] = <
+					text = <"ICU - first month">
+					description = <"Number of days at the ICU (level I) in the month of admission">
+				>
+				["at0014"] = <
+					text = <"ICU - previous month">
+					description = <"Number of days at the ICU (level I) in the month previous to discharge">
+				>
+				["at0015"] = <
+					text = <"ICU - discharge month">
+					description = <"Number of days at the ICU (level I) in the month previous to discharge, death or transfer">
+				>
+				["at0016"] = <
+					text = <"ICU - Total">
+					description = <"Total number of days at the ICU (level 1)">
+				>
+				["at0061"] = <
+					text = <"Issue date">
+					description = <"date of issue of the authorisation">
+				>
+			>
+		>
+	>

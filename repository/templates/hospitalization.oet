@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<template xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="openEHR/v1/Template">
+  <id>02e9b88a-2af7-4fc0-9724-8cd71434188b</id>
+  <name>hospitalization</name>
+  <description>
+    <lifecycle_state>Initial</lifecycle_state>
+    <details>
+      <purpose />
+      <use />
+      <misuse />
+    </details>
+    <other_details>
+      <item>
+        <key>MetaDataSet:Sample Set </key>
+        <value>Template metadata sample set </value>
+      </item>
+      <item>
+        <key>Acknowledgements</key>
+        <value />
+      </item>
+      <item>
+        <key>Business Process Level</key>
+        <value />
+      </item>
+      <item>
+        <key>Care setting</key>
+        <value />
+      </item>
+      <item>
+        <key>Client group</key>
+        <value />
+      </item>
+      <item>
+        <key>Clinical Record Element</key>
+        <value />
+      </item>
+      <item>
+        <key>Copyright</key>
+        <value />
+      </item>
+      <item>
+        <key>Issues</key>
+        <value />
+      </item>
+      <item>
+        <key>Owner</key>
+        <value />
+      </item>
+      <item>
+        <key>Sign off</key>
+        <value />
+      </item>
+      <item>
+        <key>Speciality</key>
+        <value />
+      </item>
+      <item>
+        <key>User roles</key>
+        <value />
+      </item>
+    </other_details>
+  </description>
+  <definition xsi:type="COMPOSITION" archetype_id="openEHR-EHR-COMPOSITION.hospitalisation.v1" concept_name="Hospitalisation">
+    <Content xsi:type="ADMIN_ENTRY" archetype_id="openEHR-EHR-ADMIN_ENTRY.patient_discharge.v1" concept_name="Patient discharge" path="/content[at0007]" />
+    <Content xsi:type="ADMIN_ENTRY" archetype_id="openEHR-EHR-ADMIN_ENTRY.hospitalization_authorization.v1" concept_name="Hospitalisation authorization" path="/content[at0007]" />
+    <!--Content xsi:type="ADMIN_ENTRY" archetype_id="openEHR-EHR-ADMIN_ENTRY.occupational_hazard_communication.v1" concept_name="Comunicacao de acidente de trabalho" path="/content[at0007]" /-->
+    <Content xsi:type="ADMIN_ENTRY" archetype_id="openEHR-EHR-ADMIN_ENTRY.admission.v1" concept_name="Patient admission" path="/content[at0007]">
+      <Rule path="/data[at0001]/items[at0002]" hide_on_form="true" />
+      <Rule path="/data[at0001]/items[at0073]/items[at0074]" max="0" />
+      <Rule path="/data[at0001]/items[at0073]/items[at0078]" max="0" />
+      <Rule path="/data[at0001]/items[at0073]/items[at0101]" max="0" />
+      <Rule path="/data[at0001]/items[at0073]/items[at0102]" max="0" />
+      <Rule path="/data[at0001]/items[at0073]/items[at0103]" max="0" />
+      <Rule path="/data[at0001]/items[at0073]/items[at0084]/items[at0085]" max="0" />
+      <Rule path="/data[at0001]/items[at0073]/items[at0084]/items[at0086]" max="0" />
+      <Rule path="/data[at0001]/items[at0073]/items[at0084]/items[at0088]" max="0" />
+      <Rule path="/data[at0001]/items[at0073]/items[at0084]/items[at0089]" max="0" />
+      <Rule path="/data[at0001]/items[at0073]/items[at0081]" max="0" />
+      <Rule path="/data[at0001]/items[at0023]" max="0" />
+      <Rule path="/data[at0001]/items[at0094]" max="0" />
+      <Rule path="/data[at0001]/items[at0098]" max="0" />
+      <Rule path="/data[at0001]/items[at0025]" max="0" />
+      <Rule path="/data[at0001]/items[at0121]" max="0" />
+      <Rule path="/data[at0001]/items[at0049]" max="0" />
+      <Rule path="/data[at0001]/items[at0051]" max="0" />
+      <Rule path="/data[at0001]/items[at0061]" max="0" />
+      <Rule path="/data[at0001]/items[at0066]" max="0" />
+    </Content>
+    <Content xsi:type="EVALUATION" archetype_id="openEHR-EHR-EVALUATION.problem_diagnosis-sus.v1" concept_name="Problem" path="/content[at0009]">
+      <Rule path="/data[at0001]/items[at0.2]" max="0" />
+      <Rule path="/data[at0001]/items[at0.3]" max="0" />
+      <Rule path="/data[at0001]/items[at0.4]" max="0" />
+      <Rule path="/data[at0001]/items[at0009]" max="0" />
+      <Rule path="/data[at0001]/items[at0005]" max="0" />
+      <Rule path="/data[at0001]/items[at0003]" max="0" />
+      <Rule path="/data[at0001]/items[at0004]" max="0" />
+      <Rule path="/data[at0001]/items[at0012]" max="0" />
+      <Rule path="/data[at0001]/items[at0018]" max="0" />
+      <Rule path="/data[at0001]/items[at0027]" max="0" />
+      <Rule path="/data[at0001]/items[at0030]" max="0" />
+      <Rule path="/data[at0001]/items[at0031]" max="0" />
+      <Rule path="/protocol[at0032]" hide_on_form="true" />
+    </Content>
+    <!--Content xsi:type="INSTRUCTION" archetype_id="openEHR-EHR-INSTRUCTION.request-procedure.v1" concept_name="Procedure request" path="/content[at0010]">
+      <Rule path="/activities[at0001]/description[at0009]/items[at0.146]" max="0" />
+      <Rule path="/activities[at0001]/description[at0009]/items[at0062]" max="0" />
+      <Rule path="/activities[at0001]/description[at0009]/items[at0064]" max="0" />
+      <Rule path="/activities[at0001]/description[at0009]/items[at0.145]" max="0" />
+      <Rule path="/activities[at0001]/description[at0009]/items[at0065]" max="0" />
+      <Rule path="/activities[at0001]/description[at0009]/items[at0068]" max="0" />
+      <Rule path="/activities[at0001]/description[at0009]/items[at0040]" max="0" />
+      <Rule path="/activities[at0001]/description[at0009]/items[at0144]" max="0" />
+      <Rule path="/activities[at0001]/description[at0009]/items[at0076]" max="0" />
+      <Rule path="/activities[at0001]/description[at0009]/items[at0078]" max="0" />
+      <Rule path="/protocol[at0008]" hide_on_form="true" />
+    </Content-->
+    <Content xsi:type="ACTION" archetype_id="openEHR-EHR-ACTION.procedure-sus.v1" concept_name="Procedure undertaken" path="/content[at0011]">
+      <Rule path="/description[at0001]/items[at0014]" max="0" />
+      <Rule path="/description[at0001]/items[at0051]" max="0" />
+      <Rule path="/description[at0001]/items[at0030]" max="0" />
+      <Rule path="/description[at0001]/items[at0048]" max="0" />
+      <Rule path="/description[at0001]/items[at0004]" max="0" />
+      <Rule path="/description[at0001]/items[at0018]" max="0" />
+      <Rule path="/description[at0001]/items[at0015]" max="0" />
+      <Rule path="/description[at0001]/items[at0006]" max="0" />
+      <Rule path="/description[at0001]/items[at0058]" max="0" />
+      <Rule path="/description[at0001]/items[at0005]" max="0" />
+      <Rule path="/description[at0001]/items[at0013]" max="0" />
+      <Rule path="/description[at0001]/items[at0.62]" max="0" />
+      <Rule path="/description[at0001]/items[at0.63]" max="0" />
+      <Rule path="/protocol[at0053]" hide_on_form="true" />
+    </Content>
+    <Context hide_on_form="true" />
+  </definition>
+</template>

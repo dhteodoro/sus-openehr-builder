@@ -1,0 +1,181 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-ADMIN_ENTRY.patient_discharge.v1
+
+concept
+	[at0000]	-- Alta do paciente
+language
+	original_language = <[ISO_639-1::pt-br]>
+	translations = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			author = <
+				["organisation"] = <"UERJ - Universidade do Estado do Rio de Janeiro">
+				["name"] = <"Sergio Miranda Freire">
+			>
+		>
+	>
+description
+	original_author = <
+		["name"] = <"Luciana Tricai Cavalini">
+		["organisation"] = <"Universidade do Estado do Rio de Janeiro">
+		["email"] = <"lutricav@lampada.uerj.br">
+		["date"] = <"01/10/2012">
+	>
+	details = <
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Registro dos dados de alta do SIH-SUS que não constavam do CKM">
+			use = <"Este é um arquétipo elaborado para fins de pesquisa e somente deve ser utilizado em seu âmbito.">
+			misuse = <"Não deve ser utilizado em nenhum sistema de informação real. Outros projetos de pesquisa devem utilizá-lo após cuidadoso escrutínio.">
+			copyright = <"">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the data for the patient discharge.">
+			use = <"This is an archetype created for research purposes only.">
+			misuse = <"It should not be use in any information system.">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"Initial">
+	other_contributors = <>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"A53421181E37EC7EE4E9C32530E9B729">
+	>
+
+definition
+	ADMIN_ENTRY[at0000] matches {	-- Patient discharge
+		data matches {
+			ITEM_TREE[at0001] matches {	-- Components
+				items cardinality matches {0..*; unordered} matches {
+					ELEMENT[at0002] occurrences matches {0..1} matches {	-- date of discharge
+						value matches {
+							DV_DATE_TIME matches {*}
+						}
+					}
+					ELEMENT[at0003] occurrences matches {0..1} matches {	-- reason for discharge
+						value matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {[ac0002]}		-- code for reason for discharge
+							}
+						}
+					}
+					ELEMENT[at0046] occurrences matches {0..1} matches {	-- hospital infection
+						value matches {
+							DV_BOOLEAN matches {
+								value matches {True, False}
+							}
+						}
+					}
+					ELEMENT[at0047] occurrences matches {0..1} matches {	-- claim reason
+						value matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {[ac0001]}		-- code for claim reason
+							}
+						}
+					}
+					ELEMENT[at0048] occurrences matches {0..1} matches {	-- death indicator
+						value matches {
+							DV_BOOLEAN matches {
+								value matches {True, False}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["pt-br"] = <
+			items = <
+				["at0000"] = <
+					text = <"Alta do paciente">
+					description = <"Arquétipo elaborado para registrar os dados de alta do SIH-SUS que não constavam do CKM">
+				>
+				["at0001"] = <
+					text = <"Componentes">
+					description = <"Componentes">
+				>
+				["at0002"] = <
+					text = <"data de alta">
+					description = <"Data de alta">
+				>
+				["at0003"] = <
+					text = <"razão para a saída">
+					description = <"razão para a saída">
+				>
+				["at0046"] = <
+					text = <"infecção hospitalar">
+					description = <"Ocorrência de infecção hospitalar durante a internação">
+				>
+				["at0047"] = <
+					text = <"motivo de cobrança">
+					description = <"motivo de cobrança">
+				>
+				["at0048"] = <
+					text = <"indicador de óbito">
+					description = <"indicador de óbito">
+				>
+			>
+		>
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Patient discharge">
+					description = <"Data for the patient discharge">
+				>
+				["at0001"] = <
+					text = <"Components">
+					description = <"Components">
+				>
+				["at0002"] = <
+					text = <"date of discharge">
+					description = <"date of discharge">
+				>
+				["at0003"] = <
+					text = <"reason for discharge">
+					description = <"reason for discharge">
+				>
+				["at0046"] = <
+					text = <"hospital infection">
+					description = <"occurrence of hospital infection during the hospitalisation">
+				>
+				["at0047"] = <
+					text = <"claim reason">
+					description = <"claim reason">
+				>
+				["at0048"] = <
+					text = <"death indicator">
+					description = <"death indicator">
+				>
+			>
+		>
+	>
+	constraint_definitions = <
+		["pt-br"] = <
+			items = <
+				["ac0001"] = <
+					text = <"código do motivo de cobrança">
+					description = <"código do motivo de cobrança">
+				>
+				["ac0002"] = <
+					text = <"código para o motivo de saída">
+					description = <"código para o motivo de saída">
+				>
+			>
+		>
+		["en"] = <
+			items = <
+				["ac0001"] = <
+					text = <"code for the claim reason">
+					description = <"code for the claim reason">
+				>
+				["ac0002"] = <
+					text = <"code for the discharge reason">
+					description = <"code for the discharge reason">
+				>
+			>
+		>
+	>
