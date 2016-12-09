@@ -9,44 +9,28 @@ import br.uerj.lampada.openehr.susbuilder.utils.Constants;
 
 public abstract class Mapping {
 
-//	private static final List<String> abDtcirur = new ArrayList<String>();
-//
-//	private static final List<String> abProcaih = new ArrayList<String>();
-
-	private static final List<String> arCidtr = new ArrayList<String>();
-	private static final List<String> arNumc = new ArrayList<String>();
-
-	public static final Map<String, Object> bColumnMap = new HashMap<String, Object>();
-	public static final Map<String, Object> cColumnMap = new HashMap<String, Object>();
-
-	public static final Map<String, Object> dColumnMap = new HashMap<String, Object>();
-	public static final Map<String, Object> hColumnMap = new HashMap<String, Object>();
-
-	public static final Map<String, Object> mColumnMap = new HashMap<String, Object>();
-	public static final Map<String, Object> nColumnMap = new HashMap<String, Object>();
-
-	public static final List<String> nullCID = new ArrayList<String>();
-	public static final List<String> nullLINF = new ArrayList<String>();
-
 	public static final Map<String, List<String>> nullMap = new HashMap<String, List<String>>();
-	public static final List<String> nullMEASURE = new ArrayList<String>();
-
-	public static final Map<String, Object> oColumnMap = new HashMap<String, Object>();
-	public static final Map<String, Object> rColumnMap = new HashMap<String, Object>();
-
 	public static final Map<String, String> terminologyMap = new HashMap<String, String>();
-	public static final Map<String, String> unitMap = new HashMap<String, String>();
 
-//	static {
-//		abProcaih.add("ap_pripal");
-//		abProcaih.add("ab_procaih");
-//		abProcaih.add("ab_prcaih2");
-//		abProcaih.add("ab_prcaih3");
-//	}
-//	static {
-//		abDtcirur.add("ab_dtcirur");
-//		abDtcirur.add("ab_dtcirg2");
-//	}
+	public static final Map<String, String> unitMap = new HashMap<String, String>();
+	private static final List<String> arCidtr = new ArrayList<String>();
+
+	private static final List<String> arNumc = new ArrayList<String>();
+	private static final Map<String, Object> bColumnMap = new HashMap<String, Object>();
+
+	private static final Map<String, Object> cColumnMap = new HashMap<String, Object>();
+	private static final Map<String, Object> dColumnMap = new HashMap<String, Object>();
+
+	private static final Map<String, Object> hColumnMap = new HashMap<String, Object>();
+	private static final Map<String, Object> mColumnMap = new HashMap<String, Object>();
+	private static final Map<String, Object> nColumnMap = new HashMap<String, Object>();
+
+	private static final List<String> nullCID = new ArrayList<String>();
+	private static final List<String> nullLINF = new ArrayList<String>();
+
+	private static final List<String> nullMEASURE = new ArrayList<String>();
+	private static final Map<String, Object> oColumnMap = new HashMap<String, Object>();
+	private static final Map<String, Object> rColumnMap = new HashMap<String, Object>();
 
 	static {
 		bColumnMap
@@ -84,26 +68,10 @@ public abstract class Mapping {
 		bColumnMap
 				.put("/content[openEHR-EHR-OBSERVATION.body_mass_index.v1]/data[at0001]/events[at0002]/data[at0003]/items[at0004]/value",
 						"ab_imc");
-//		bColumnMap
-//				.put("/content[openEHR-EHR-ACTION.procedure-sus.v1]/description[at0001]/items[at0002]/value",
-//						abProcaih);
-		
 		bColumnMap
 				.put("/content[openEHR-EHR-ACTION.procedure-sus.v1]/description[at0001]/items[at0002]/value",
 						"ap_pripal");
-		
-//		bColumnMap.put(
-//				"/content[openEHR-EHR-ACTION.procedure-sus.v1]/time/value",
-//				abDtcirur);
-		
-//		bColumnMap.put(
-//				"/content[openEHR-EHR-ACTION.procedure-sus.v1]/time/value",
-//				"ab_dtcirur");
-
-		bColumnMap.put(
-				"time",
-						"ab_dtcirur");
-
+		bColumnMap.put("time", "ab_dtcirur");
 		bColumnMap
 				.put("/content[openEHR-EHR-EVALUATION.bariatric_surgery_evaluation.v1]/data[at0001]/items[at0002]/value",
 						"ab_mesacom");
@@ -156,10 +124,7 @@ public abstract class Mapping {
 						"aq_dtintr");
 		cColumnMap
 				.put("/content[openEHR-EHR-ADMIN_ENTRY.high_complexity_procedures_sus.v1]/data[at0001]/items[at0016]/items[at0014]/value",
-						"aq_esqu_p1");
-		cColumnMap
-				.put("/content[openEHR-EHR-ADMIN_ENTRY.high_complexity_procedures_sus.v1]/data[at0001]/items[at0016]/items[at0015]/value",
-						"aq_esqu_p2");
+						"aq_esqu");
 		cColumnMap
 				.put("/content[openEHR-EHR-EVALUATION.problem_diagnosis-sus.v1]/data[at0001]/items[at0.4]/value",
 						"aq_linfin");
@@ -202,7 +167,7 @@ public abstract class Mapping {
 						"ap_ufnacio");
 	}
 	static {
-		// hospitalization
+		// hospitalisation
 		hColumnMap
 				.put("/content[openEHR-EHR-ADMIN_ENTRY.admission.v1]/data[at0001]/items[at0071]/value",
 						"dt_inter");
@@ -231,15 +196,6 @@ public abstract class Mapping {
 				.put("/content[openEHR-EHR-ADMIN_ENTRY.hospitalization_authorization.v1]/data[at0001]/items[at0061]/value",
 						"dt_cmpt");
 		hColumnMap
-				.put("/content[openEHR-EHR-ADMIN_ENTRY.hospitalization_authorization.v1]/data[at0001]/items[at0013]/value",
-						"uti_mes_in");
-		hColumnMap
-				.put("/content[openEHR-EHR-ADMIN_ENTRY.hospitalization_authorization.v1]/data[at0001]/items[at0014]/value",
-						"uti_mes_an");
-		hColumnMap
-				.put("/content[openEHR-EHR-ADMIN_ENTRY.hospitalization_authorization.v1]/data[at0001]/items[at0015]/value",
-						"uti_mes_al");
-		hColumnMap
 				.put("/content[openEHR-EHR-ADMIN_ENTRY.hospitalization_authorization.v1]/data[at0001]/items[at0016]/value",
 						"uti_mes_to");
 		hColumnMap
@@ -254,9 +210,6 @@ public abstract class Mapping {
 		hColumnMap
 				.put("/content[openEHR-EHR-EVALUATION.problem_diagnosis-sus.v1]/data[at0001]/items[at0.1]/value",
 						"diag_secun");
-//		hColumnMap
-//				.put("/content[openEHR-EHR-OBSERVATION.menstruation.v1]/data[at0001]/events[at0002]/state[at0022]/items[at0023]/value",
-//						"contracep1");
 	}
 
 	static {
@@ -294,7 +247,7 @@ public abstract class Mapping {
 				.put("/content[openEHR-EHR-EVALUATION.problem_diagnosis-sus.v1]/data[at0001]/items[at0002.1]/value",
 						"ap_cidpri");
 
-		// medicines
+		// medication
 		mColumnMap
 				.put("/content[openEHR-EHR-OBSERVATION.body_weight.v1]/data[at0002]/events[at0003]/data[at0001]/items[at0004]/value",
 						"am_peso");
@@ -352,7 +305,7 @@ public abstract class Mapping {
 						"an_altura");
 		nColumnMap
 				.put("/content[openEHR-EHR-OBSERVATION.bodily_output-urination.v1]/data[at0001]/events[at0006]/data[at0003]/items[openEHR-EHR-CLUSTER.fluid.v1]/items[at0006]/items[at0007]/value",
-						"an_diures");		
+						"an_diures");
 		nColumnMap
 				.put("/content[openEHR-EHR-OBSERVATION.bodily_output-urination.v1]/data[at0001]/events[at0006]/data[at0003]/items[openEHR-EHR-CLUSTER.fluid.v1]/items[at0001]/value",
 						"an_urine");
@@ -529,6 +482,14 @@ public abstract class Mapping {
 				.put("/content[openEHR-EHR-EVALUATION.problem_diagnosis-sus.v1]/data[at0001]/items[at0002.1]/value",
 						"CID10");
 
+		// bariatrics
+		terminologyMap
+				.put("/content[openEHR-EHR-EVALUATION.bariatric_surgery_evaluation.v1]/data[at0001]/items[at0003]/value",
+						"P_BAROS");
+		terminologyMap
+				.put("/content[openEHR-EHR-EVALUATION.bariatric_surgery_evaluation.v1]/data[at0001]/items[at0004]/value",
+						"TAB_BAROS");
+
 		// chemotherapy
 		terminologyMap
 				.put("/content[openEHR-EHR-EVALUATION.problem_diagnosis-sus.v1]/data[at0001]/items[openEHR-EHR-CLUSTER.tnm_staging-sus.v1]/items[at0.43]/value",
@@ -568,7 +529,7 @@ public abstract class Mapping {
 				.put("/content[openEHR-EHR-ADMIN_ENTRY.demographic_data.v1]/data[at0001]/items[at0007]/value",
 						"INSTRU");
 
-		// hospitalization
+		// hospitalisation
 		terminologyMap
 				.put("/content[openEHR-EHR-ADMIN_ENTRY.admission.v1]/data[at0001]/items[at0041]/value",
 						"LEITOS");
@@ -585,7 +546,7 @@ public abstract class Mapping {
 				.put("/content[openEHR-EHR-ADMIN_ENTRY.admission.v1]/data[at0001]/items[at0073]/items[at0104]/items[at0106]/value",
 						"CGC_HOSP");
 		terminologyMap
-				.put("/content[openEHR-EHR-ADMIN_ENTRY.admission.v1]/data[at0001]/items[at0073]/items[at0084]/items[at0087]/value", 
+				.put("/content[openEHR-EHR-ADMIN_ENTRY.admission.v1]/data[at0001]/items[at0073]/items[at0084]/items[at0087]/value",
 						"IBGE");
 	}
 	static {
@@ -600,7 +561,12 @@ public abstract class Mapping {
 				"/content[openEHR-EHR-OBSERVATION.height.v1]/data[at0001]/events[at0002]/data[at0003]/items[at0004]/value",
 				"cm");
 
-		// nefrology
+		// chemotherapy
+		unitMap.put(
+				"/content[openEHR-EHR-ADMIN_ENTRY.high_complexity_procedures_sus.v1]/data[at0001]/items[at0016]/items[at0013]/value",
+				"mo");
+
+		// nephrology
 		unitMap.put(
 				"/content[openEHR-EHR-OBSERVATION.bodily_output-urination.v1]/data[at0001]/events[at0006]/data[at0003]/items[openEHR-EHR-CLUSTER.fluid.v1]/items[at0006]/items[at0007]/value",
 				"ml");
@@ -657,16 +623,6 @@ public abstract class Mapping {
 				nullLINF);
 	}
 
-	// private Map<String, Object> columnMap;
-
-	// public Mapping(String template) {
-	// this.setColumnMap(template);
-	// }
-
-	// public Map<String, Object> getColumnMap() {
-	// return columnMap;
-	// }
-
 	public static Map<String, Object> getColumnMap(String template) {
 		Map<String, Object> columnMap = null;
 		if (template == null) {
@@ -677,9 +633,9 @@ public abstract class Mapping {
 			columnMap = cColumnMap;
 		} else if (template.equals(Constants.DEMOGRAPHIC_DATA)) {
 			columnMap = dColumnMap;
-		} else if (template.equals(Constants.HOSPITALIZATION)) {
+		} else if (template.equals(Constants.HOSPITALISATION)) {
 			columnMap = hColumnMap;
-		} else if (template.equals(Constants.MEDICINES)) {
+		} else if (template.equals(Constants.MEDICATION)) {
 			columnMap = mColumnMap;
 		} else if (template.equals(Constants.NEPHROLOGY)) {
 			columnMap = nColumnMap;
@@ -690,10 +646,6 @@ public abstract class Mapping {
 		}
 		return columnMap;
 	}
-
-	// public void setColumnMap(Map<String, Object> columnMap) {
-	// this.columnMap = columnMap;
-	// }
 
 	public static String pathFromColumn(String col, String template) {
 		Map<String, Object> columnMap = getColumnMap(template);

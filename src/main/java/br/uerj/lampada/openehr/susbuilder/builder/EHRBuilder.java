@@ -48,11 +48,10 @@ import br.uerj.lampada.openehr.susbuilder.utils.Constants;
  */
 public class EHRBuilder {
 
-	private static String NAMESPACE = "local";
-
-	private static String PARTY_NAME = "UERJ SUS OpenEHR Builder";
 	private static PartyIdentified COMMITTER = new PartyIdentified(null,
-			PARTY_NAME, null);
+			"UERJ SUS OpenEHR Builder", null);
+
+	private static String NAMESPACE = "local";
 
 	private static String SYSTEM_ID = "susehrbuilder.openehr.lampada.uerj.br";
 
@@ -108,6 +107,79 @@ public class EHRBuilder {
 
 		this.compositionRefs = new ArrayList<ObjectRef>();
 		this.contributionRefs = new ArrayList<ObjectRef>();
+	}
+
+	public void createEHRObj() throws Exception {
+		createCompositions();
+		createEHRAccess();
+		createEHRStatus();
+		createEHR();
+	}
+
+	public List<Contribution> getContributions() {
+		return contributions;
+	}
+
+	// Start POJO
+	public EHR getEhr() {
+		return ehr;
+	}
+
+	public List<VersionedComposition> getVersionedCompositions() {
+		return versionedCompositions;
+	}
+
+	public VersionedEHRAccess getVersionedEHRAccess() {
+		return versionedEHRAccess;
+	}
+
+	public VersionedEHRStatus getVersionedEHRStatus() {
+		return versionedEHRStatus;
+	}
+
+	public List<Version<Composition>> getVersionFromComposition()
+			throws Exception {
+		// create Compositions
+		List<Version<Composition>> versions = new ArrayList<Version<Composition>>();
+		for (Composition composition : compositions) {
+			String compositionUUID = Constants.COMPOSITION_UUID_PREFIX + count
+					+ "." + uuid;
+			String contributionUUID = Constants.CONTRIBUTION_UUID_PREFIX
+					+ count + "." + uuid;
+
+			ObjectRef contributionRef = new ObjectRef(new HierObjectID(
+					contributionUUID), NAMESPACE, "CONTRIBUTION");
+
+			Version<Composition> vc = originalVersion(compositionUUID,
+					composition, contributionRef, "composition");
+
+			versions.add(vc);
+			count++;
+		}
+		return versions;
+	}
+
+	public void setContributions(List<Contribution> contributions) {
+		this.contributions = contributions;
+	}
+
+	public void setEhr(EHR ehr) {
+		this.ehr = ehr;
+	}
+
+	public void setVersionedCompositions(
+			List<VersionedComposition> versionedCompositions) {
+		this.versionedCompositions = versionedCompositions;
+	}
+
+	// private static boolean CREATE_SEPARATE_CONTRIBUTION_FOR_EACH_FILE = true;
+
+	public void setVersionedEHRAccess(VersionedEHRAccess versionedEHRAccess) {
+		this.versionedEHRAccess = versionedEHRAccess;
+	}
+
+	public void setVersionedEHRStatus(VersionedEHRStatus versionedEHRStatus) {
+		this.versionedEHRStatus = versionedEHRStatus;
 	}
 
 	private AuditDetails constructAuditDetails(String type) throws Exception {
@@ -267,8 +339,6 @@ public class EHRBuilder {
 		return new VersionedComposition(uid, ownerID, timeCreated, versions);
 	}
 
-	// private static boolean CREATE_SEPARATE_CONTRIBUTION_FOR_EACH_FILE = true;
-
 	private VersionedEHRAccess versionedEHRAccess(String uuid,
 			EHRAccess ehrAccess, ObjectRef ownerID, ObjectRef contribution)
 			throws Exception {
@@ -295,76 +365,5 @@ public class EHRBuilder {
 		versions.add(item);
 
 		return new VersionedEHRStatus(uid, ownerID, timeCreated, versions);
-	}
-
-	public void createEHRObj() throws Exception {
-		createCompositions();
-		createEHRAccess();
-		createEHRStatus();
-		createEHR();
-	}
-
-	public List<Contribution> getContributions() {
-		return contributions;
-	}
-
-	// Start POJO
-	public EHR getEhr() {
-		return ehr;
-	}
-
-	public List<VersionedComposition> getVersionedCompositions() {
-		return versionedCompositions;
-	}
-
-	public VersionedEHRAccess getVersionedEHRAccess() {
-		return versionedEHRAccess;
-	}
-
-	public VersionedEHRStatus getVersionedEHRStatus() {
-		return versionedEHRStatus;
-	}
-
-	public List<Version<Composition>> getVersionFromComposition()
-			throws Exception {
-		// create Compositions
-		List<Version<Composition>> versions = new ArrayList<Version<Composition>>();
-		for (Composition composition : compositions) {
-			String compositionUUID = Constants.COMPOSITION_UUID_PREFIX + count
-					+ "." + uuid;
-			String contributionUUID = Constants.CONTRIBUTION_UUID_PREFIX
-					+ count + "." + uuid;
-
-			ObjectRef contributionRef = new ObjectRef(new HierObjectID(
-					contributionUUID), NAMESPACE, "CONTRIBUTION");
-
-			Version<Composition> vc = originalVersion(compositionUUID,
-					composition, contributionRef, "composition");
-
-			versions.add(vc);
-			count++;
-		}
-		return versions;
-	}
-
-	public void setContributions(List<Contribution> contributions) {
-		this.contributions = contributions;
-	}
-
-	public void setEhr(EHR ehr) {
-		this.ehr = ehr;
-	}
-
-	public void setVersionedCompositions(
-			List<VersionedComposition> versionedCompositions) {
-		this.versionedCompositions = versionedCompositions;
-	}
-
-	public void setVersionedEHRAccess(VersionedEHRAccess versionedEHRAccess) {
-		this.versionedEHRAccess = versionedEHRAccess;
-	}
-
-	public void setVersionedEHRStatus(VersionedEHRStatus versionedEHRStatus) {
-		this.versionedEHRStatus = versionedEHRStatus;
 	}
 }

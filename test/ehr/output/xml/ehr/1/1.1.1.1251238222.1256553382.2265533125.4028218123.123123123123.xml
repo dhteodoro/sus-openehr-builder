@@ -1,0 +1,263 @@
+<v1:ehr xmlns:v1="http://schemas.openehr.org/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <v1:system_id>
+    <v1:value>susehrbuilder.openehr.lampada.uerj.br</v1:value>
+  </v1:system_id>
+  <v1:ehr_id>
+    <v1:value>1.1.1.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+  </v1:ehr_id>
+  <v1:time_created>
+    <v1:value>2014-06-02T15:21:09,737</v1:value>
+  </v1:time_created>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.1.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.2.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.3.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.4.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.5.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.6.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.7.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.8.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.9.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.10.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.11.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.12.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.13.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.14.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.15.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.16.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.17.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:contributions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.3.18.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>CONTRIBUTION</v1:type>
+  </v1:contributions>
+  <v1:ehr_access>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.4.1.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_EHR_ACCESS</v1:type>
+  </v1:ehr_access>
+  <v1:ehr_status>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.5.1.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_EHR_STATUS</v1:type>
+  </v1:ehr_status>
+  <v1:compositions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.2.1.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_COMPOSITION</v1:type>
+  </v1:compositions>
+  <v1:compositions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.2.2.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_COMPOSITION</v1:type>
+  </v1:compositions>
+  <v1:compositions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.2.3.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_COMPOSITION</v1:type>
+  </v1:compositions>
+  <v1:compositions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.2.4.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_COMPOSITION</v1:type>
+  </v1:compositions>
+  <v1:compositions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.2.5.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_COMPOSITION</v1:type>
+  </v1:compositions>
+  <v1:compositions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.2.6.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_COMPOSITION</v1:type>
+  </v1:compositions>
+  <v1:compositions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.2.7.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_COMPOSITION</v1:type>
+  </v1:compositions>
+  <v1:compositions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.2.8.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_COMPOSITION</v1:type>
+  </v1:compositions>
+  <v1:compositions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.2.9.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_COMPOSITION</v1:type>
+  </v1:compositions>
+  <v1:compositions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.2.10.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_COMPOSITION</v1:type>
+  </v1:compositions>
+  <v1:compositions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.2.11.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_COMPOSITION</v1:type>
+  </v1:compositions>
+  <v1:compositions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.2.12.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_COMPOSITION</v1:type>
+  </v1:compositions>
+  <v1:compositions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.2.13.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_COMPOSITION</v1:type>
+  </v1:compositions>
+  <v1:compositions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.2.14.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_COMPOSITION</v1:type>
+  </v1:compositions>
+  <v1:compositions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.2.15.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_COMPOSITION</v1:type>
+  </v1:compositions>
+  <v1:compositions>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.2.16.1251238222.1256553382.2265533125.4028218123.123123123123</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>VERSIONED_COMPOSITION</v1:type>
+  </v1:compositions>
+</v1:ehr>

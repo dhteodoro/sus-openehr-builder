@@ -38,87 +38,6 @@ public class EHRPrinter extends EHRPrintCore implements EHRObjectPrinter {
 		super(outputFolder, format);
 	}
 
-	private String createOutputFolder(String folder) {
-		String ehrFolder = Constants.EHR_STR;
-		String objDir = getOutputFolder() + "/" + ehrFolder + "/" + folder;
-
-		// File file = new File(objDir);
-		// // if the directory does not exist, create it
-		// if (!file.exists()) {
-		// file.mkdirs();
-		// }
-		return objDir;
-	}
-
-	/**
-	 * Write EHRs
-	 * 
-	 * @param uuid
-	 * @param compositions
-	 * @param outputFolder
-	 * @throws Exception
-	 */
-	private void writeEHRObj(String uuid, EHRBuilder ebuilder) throws Exception {
-
-		// Write to file
-		for (String docType : docTypePrefix.keySet()) {
-			if (docType.equals(Constants.COMPOSITION_STR)) {
-				// Write Composition
-				writeListEHRObj(uuid, docType,
-						(List<Object>) (List<?>) ebuilder
-								.getVersionedCompositions());
-			} else if (docType.equals(Constants.CONTRIBUTION_STR)) {
-				// Write Contribution
-				writeListEHRObj(uuid, docType,
-						(List<Object>) (List<?>) ebuilder.getContributions());
-			} else {
-				// Write EHR
-				if (docType.equals(Constants.EHR_STR)) {
-					writeSingleEHRObj(uuid, docType, ebuilder.getEhr());
-					// Write EHRAccess
-				} else if (docType.equals(Constants.EHRACCESS_STR)) {
-					writeSingleEHRObj(uuid, docType,
-							ebuilder.getVersionedEHRAccess());
-					// Write EHRStatus
-				} else if (docType.equals(Constants.EHRSTATUS_STR)) {
-					writeSingleEHRObj(uuid, docType,
-							ebuilder.getVersionedEHRStatus());
-				}
-			}
-		}
-	}
-
-	private void writeListEHRObj(String uuid, String docType,
-			List<Object> ehrListObj) throws Exception {
-		// Write Compositions and Constributions
-
-		for (int i = 0; i < ehrListObj.size(); i++) {
-			String docId = docTypePrefix.get(docType) + (i + 1) + "." + uuid;
-			Object ehrObj = ehrListObj.get(i);
-
-			// String outputFolder = createOutputFolder(docType + "/"+
-			// Constants.EHR_UUID_PREFIX + uuid);
-			String outputFolder = createOutputFolder(docType);
-
-			String filename = outputFolder + "/" + docId + "." + getFormat();
-
-			writeInFormat(ehrObj, filename);
-		}
-	}
-
-	private void writeSingleEHRObj(String uuid, String docType, Object ehrObj)
-			throws Exception {
-		// Write EHRStatus
-
-		String docId = docTypePrefix.get(docType) + uuid;
-
-		String outputFolder = createOutputFolder(docType);
-
-		String filename = outputFolder + "/" + docId + "." + getFormat();
-
-		writeInFormat(ehrObj, filename);
-	}
-
 	/**
 	 * Write EHRs
 	 * 
@@ -128,14 +47,79 @@ public class EHRPrinter extends EHRPrintCore implements EHRObjectPrinter {
 	 * @throws Exception
 	 */
 	@Override
-	public void writeOpenEHRObject(String uuid, List<Composition> compositions)
-			throws Exception {
+	public void writeOpenEHRObject(String uuid, String outputFolder,
+			List<Composition> compositions) throws Exception {
 
 		String patientId = Constants.EHR_UUID_PREFIX + uuid;
 
 		EHRBuilder eb = new EHRBuilder(patientId, uuid, compositions);
 		eb.createEHRObj();
 
-		writeEHRObj(uuid, eb);
+		writeEHRObj(uuid, outputFolder, eb);
+	}
+
+	/**
+	 * Write EHRs
+	 * 
+	 * @param uuid
+	 * @param compositions
+	 * @param outputFolder
+	 * @throws Exception
+	 */
+	private void writeEHRObj(String uuid, String outputFolder,
+			EHRBuilder ebuilder) throws Exception {
+
+		// Write to file
+		for (String docType : docTypePrefix.keySet()) {
+			if (docType.equals(Constants.COMPOSITION_STR)) {
+				// Write Composition
+				writeListEHRObj(uuid, outputFolder, docType,
+						(List<Object>) (List<?>) ebuilder
+								.getVersionedCompositions());
+			} else if (docType.equals(Constants.CONTRIBUTION_STR)) {
+				// Write Contribution
+				writeListEHRObj(uuid, outputFolder, docType,
+						(List<Object>) (List<?>) ebuilder.getContributions());
+			} else {
+				// Write EHR
+				if (docType.equals(Constants.EHR_STR)) {
+					writeSingleEHRObj(uuid, outputFolder, docType,
+							ebuilder.getEhr());
+					// Write EHRAccess
+				} else if (docType.equals(Constants.EHRACCESS_STR)) {
+					writeSingleEHRObj(uuid, outputFolder, docType,
+							ebuilder.getVersionedEHRAccess());
+					// Write EHRStatus
+				} else if (docType.equals(Constants.EHRSTATUS_STR)) {
+					writeSingleEHRObj(uuid, outputFolder, docType,
+							ebuilder.getVersionedEHRStatus());
+				}
+			}
+		}
+	}
+
+	private void writeListEHRObj(String uuid, String outputFolder,
+			String docType, List<Object> ehrListObj) throws Exception {
+		// Write Compositions and Constributions
+
+		for (int i = 0; i < ehrListObj.size(); i++) {
+			String docId = docTypePrefix.get(docType) + (i + 1) + "." + uuid;
+			Object ehrObj = ehrListObj.get(i);
+
+			String filename = outputFolder + "/" + docId + "." + getFormat();
+
+			writeInFormat(ehrObj, filename);
+		}
+	}
+
+	private void writeSingleEHRObj(String uuid, String outputFolder,
+			String docType, Object ehrObj) throws Exception {
+		// Write EHRStatus
+
+		String docId = docTypePrefix.get(docType) + uuid;
+
+		String filename = outputFolder + "/" + docId + "." + getFormat();
+
+		writeInFormat(ehrObj, filename);
 	}
 }

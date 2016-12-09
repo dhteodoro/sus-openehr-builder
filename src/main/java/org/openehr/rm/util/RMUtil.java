@@ -46,6 +46,71 @@ public class RMUtil {
 
 	private static final Logger log = Logger.getLogger(RMUtil.class);
 
+	/**
+	 * Clears away unnecessary RM structure in given composition
+	 * 
+	 * The following structures are purged 1. section with empty list of items
+	 * 2. entry with empty items as data or other key attributes
+	 * 
+	 * TODO only entry type Observation is expected for now
+	 * 
+	 * @param composition
+	 */
+	public static void purge(Composition composition) {
+
+		log.debug("Composition.purge() started..");
+
+		List<ContentItem> items = composition.getContent();
+
+		for (Iterator<ContentItem> it = items.iterator(); it.hasNext();) {
+			ContentItem item = it.next();
+			if (isEmpty(item)) {
+
+				it.remove();
+
+				log.debug("item of class " + item.getClass() + ", removed..");
+
+			} else if (item instanceof Section) {
+
+				Section section = (Section) item;
+				purge(section);
+			}
+		}
+
+		log.debug("Composition.purge() finished..");
+	}
+
+	/**
+	 * Purges the given section. Recursive function.
+	 * 
+	 * 
+	 * @param section
+	 */
+	public static void purge(Section section) {
+
+		log.debug("Section.purge() started.. ");
+
+		List<ContentItem> items = section.getItems();
+
+		for (Iterator<ContentItem> it = items.iterator(); it.hasNext();) {
+			ContentItem item = it.next();
+
+			if (isEmpty(item)) {
+
+				it.remove();
+
+				log.debug("item of class " + item.getClass() + ", removed..");
+
+			} else if (item instanceof Section) {
+
+				Section subsection = (Section) item;
+				purge(subsection);
+			}
+		}
+
+		log.debug("Section.purge() finished.. ");
+	}
+
 	private static boolean isEmpty(ContentItem item) {
 		if (item instanceof Section) {
 			return isEmpty((Section) item);
@@ -137,71 +202,6 @@ public class RMUtil {
 			}
 		}
 		return true;
-	}
-
-	/**
-	 * Clears away unnecessary RM structure in given composition
-	 * 
-	 * The following structures are purged 1. section with empty list of items
-	 * 2. entry with empty items as data or other key attributes
-	 * 
-	 * TODO only entry type Observation is expected for now
-	 * 
-	 * @param composition
-	 */
-	public static void purge(Composition composition) {
-
-		log.debug("Composition.purge() started..");
-
-		List<ContentItem> items = composition.getContent();
-
-		for (Iterator<ContentItem> it = items.iterator(); it.hasNext();) {
-			ContentItem item = it.next();
-			if (isEmpty(item)) {
-
-				it.remove();
-
-				log.debug("item of class " + item.getClass() + ", removed..");
-
-			} else if (item instanceof Section) {
-
-				Section section = (Section) item;
-				purge(section);
-			}
-		}
-
-		log.debug("Composition.purge() finished..");
-	}
-
-	/**
-	 * Purges the given section. Recursive function.
-	 * 
-	 * 
-	 * @param section
-	 */
-	public static void purge(Section section) {
-
-		log.debug("Section.purge() started.. ");
-
-		List<ContentItem> items = section.getItems();
-
-		for (Iterator<ContentItem> it = items.iterator(); it.hasNext();) {
-			ContentItem item = it.next();
-
-			if (isEmpty(item)) {
-
-				it.remove();
-
-				log.debug("item of class " + item.getClass() + ", removed..");
-
-			} else if (item instanceof Section) {
-
-				Section subsection = (Section) item;
-				purge(subsection);
-			}
-		}
-
-		log.debug("Section.purge() finished.. ");
 	}
 }
 /*

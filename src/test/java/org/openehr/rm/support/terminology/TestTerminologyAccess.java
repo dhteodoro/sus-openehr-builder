@@ -33,8 +33,6 @@ public class TestTerminologyAccess implements TerminologyAccess {
 	public static final CodePhrase CHANGE = new CodePhrase(
 			TestTerminologyID.SNOMEDCT, "changeTypeCode");
 
-	static Set<CodePhrase> CODES;
-
 	public static final CodePhrase CREATION = new CodePhrase("openehr", "249");
 
 	public static final CodePhrase ENGLISH = new CodePhrase("test", "en");
@@ -49,6 +47,7 @@ public class TestTerminologyAccess implements TerminologyAccess {
 
 	public static final CodePhrase NULL_FLAVOUR = new CodePhrase("test",
 			"unanswered");
+
 	public static final CodePhrase PERSISTENT = new CodePhrase("test",
 			"persistent");
 	public static final CodePhrase RELATIONS = new CodePhrase("test",
@@ -59,6 +58,7 @@ public class TestTerminologyAccess implements TerminologyAccess {
 			"setting_code");
 	public static final CodePhrase SOME_STATE = null;
 	public static final CodePhrase SOME_TRANSITION = null;
+	static Set<CodePhrase> CODES;
 	static {
 		CODES = new HashSet<CodePhrase>();
 		CODES.add(FUNCTION);

@@ -49,7 +49,7 @@ definition
 		data matches {
 			ITEM_TREE[at0001] matches {	-- estrutura
 				items cardinality matches {1..*; ordered} matches {
-					ELEMENT[at0002.1] matches {	-- ! - Problema
+					ELEMENT[at0002.1] matches {	-- Problema
 						value matches {
 							DV_CODED_TEXT matches {
 								defining_code matches {[ac0.3]}		-- código do diagnóstico primário
@@ -212,7 +212,7 @@ definition
 						include
 							archetype_id/value matches {/.*/}
 					}
-					allow_archetype CLUSTER[at0043.1] occurrences matches {0..*} matches {	-- ! - Staging
+					allow_archetype CLUSTER[at0043.1] occurrences matches {0..*} matches {	-- Staging
 						include
 							archetype_id/value matches {/.*/}
 						exclude

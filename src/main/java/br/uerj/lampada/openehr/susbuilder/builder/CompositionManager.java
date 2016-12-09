@@ -54,34 +54,6 @@ public class CompositionManager {
 	}
 
 	/**
-	 * Retrieve the values from the database that are going to be used to fill
-	 * in the composition
-	 * 
-	 * @param db
-	 * @param template
-	 * @param isAIH
-	 * @param patientId
-	 * @return
-	 * @throws SQLException
-	 */
-	private List<HashMap<String, Object>> retrieveCompositionContent(
-			DBHandler db, String template, boolean isAIH, String patientId)
-			throws SQLException {
-		List<HashMap<String, Object>> results = new ArrayList<HashMap<String, Object>>();
-
-		ReadInstance ri = new ReadInstance(isAIH, template);
-
-		try {
-			ri.queryTemplate(db, patientId);
-		} catch (Exception e) {
-			log.error("Cannot retrieve composition content: "+ e.getMessage());
-		}
-
-		results = ri.retrieveResultsToLoH();
-		return results;
-	}
-
-	/**
 	 * Create the compositions for a given patient
 	 * 
 	 * @param patient
@@ -146,7 +118,7 @@ public class CompositionManager {
 	 * @return
 	 * @throws IOException
 	 */
-	private static DBHandler connectDB() {
+	private DBHandler connectDB() {
 		Properties props = new Properties();
 		try {
 			props.load(new FileInputStream(Constants.builderConfig));
@@ -177,6 +149,34 @@ public class CompositionManager {
 	}
 
 	/**
+	 * Retrieve the values from the database that are going to be used to fill
+	 * in the composition
+	 * 
+	 * @param db
+	 * @param template
+	 * @param isAIH
+	 * @param patientId
+	 * @return
+	 * @throws SQLException
+	 */
+	private List<HashMap<String, Object>> retrieveCompositionContent(
+			DBHandler db, String template, boolean isAIH, String patientId)
+			throws SQLException {
+		List<HashMap<String, Object>> results = new ArrayList<HashMap<String, Object>>();
+
+		ReadInstance ri = new ReadInstance(isAIH, template, db);
+
+		try {
+			ri.queryTemplate(patientId);
+		} catch (Exception e) {
+			log.error("Cannot retrieve composition content: " + e.getMessage());
+		}
+
+		results = ri.retrieveResultsToLoH();
+		return results;
+	}
+
+	/**
 	 * Method used to convert a SUS patient ids (or authorization ids) in a UUID
 	 * The ids coming from the SUS database are in two formats: hash sequence
 	 * (APAC) and integer sequence (AIH) E.g.: Hash ----> ƒ„ƒ{{}{‚€�^?€€^?|
@@ -197,12 +197,12 @@ public class CompositionManager {
 			}
 		}
 
-		if (uuid.length() / 5 < 2) {
-			while (uuid.length() / 5 < 2) {
+		if (uuid.length() / 5 < 3) {
+			while (uuid.length() / 5 < 3) {
 				uuid = "0" + uuid;
 			}
 		}
-		int div = uuid.length() / 5 - 1;
+		int div = uuid.length() / 5;
 		Matcher uuidMatcher = Pattern.compile(
 				"^(\\d{" + div + "})(\\d{" + div + "})(\\d{" + div + "})(\\d{"
 						+ div + "})(\\d.*)$").matcher(uuid);

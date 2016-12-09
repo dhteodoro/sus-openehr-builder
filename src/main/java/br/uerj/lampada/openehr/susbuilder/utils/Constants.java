@@ -36,13 +36,13 @@ public abstract class Constants {
 	public static final String EHRSTATUS_STR = "ehr_status";
 
 	public static final String EHRSTATUS_UUID_PREFIX = "1.5.1";
-	public static final String HOSPITALIZATION = "hospitalization";
+	public static final String HOSPITALISATION = "hospitalisation";
 	public static String logConfig;
 	public static int logStep;
-	public static final String MEDICINES = "medicines";
-	public static final String NEPHROLOGY = "nephrology";
-
+	public static final String MEDICATION = "medication";
 	public static final String MISCELLANEOUS = "outpatient_miscellaneous";
+
+	public static final String NEPHROLOGY = "nephrology";
 
 	public static final String RADIOTHERAPY = "radiotherapy";
 
@@ -77,13 +77,13 @@ public abstract class Constants {
 
 		templatesAPAC.add(BARIATRIC_SURGERY);
 		templatesAPAC.add(CHEMOTHERAPY);
-		templatesAPAC.add(MEDICINES);
+		templatesAPAC.add(MEDICATION);
 		templatesAPAC.add(NEPHROLOGY);
 		templatesAPAC.add(MISCELLANEOUS);
 		templatesAPAC.add(RADIOTHERAPY);
 		templatesAPAC.add(DEMOGRAPHIC_DATA);
 
-		templatesAIH.add(HOSPITALIZATION);
+		templatesAIH.add(HOSPITALISATION);
 		templatesAIH.add(DEMOGRAPHIC_DATA);
 
 		try {

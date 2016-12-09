@@ -1,0 +1,81 @@
+<v1:versioned_ehr_status xmlns:v1="http://schemas.openehr.org/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <v1:uid>
+    <v1:value>1.5.1.001.211.100.482.339</v1:value>
+  </v1:uid>
+  <v1:owner_id>
+    <v1:id xsi:type="v1:HIER_OBJECT_ID">
+      <v1:value>1.1.1.001.211.100.482.339</v1:value>
+    </v1:id>
+    <v1:namespace>local</v1:namespace>
+    <v1:type>EHR</v1:type>
+  </v1:owner_id>
+  <v1:time_created>
+    <v1:value>2014-06-02T15:21:03,467</v1:value>
+  </v1:time_created>
+  <v1:versions xsi:type="v1:ORIGINAL_VERSION">
+    <v1:contribution>
+      <v1:id xsi:type="v1:HIER_OBJECT_ID">
+        <v1:value>1.3.6.001.211.100.482.339</v1:value>
+      </v1:id>
+      <v1:namespace>local</v1:namespace>
+      <v1:type>CONTRIBUTION</v1:type>
+    </v1:contribution>
+    <v1:commit_audit>
+      <v1:system_id>susehrbuilder.openehr.lampada.uerj.br</v1:system_id>
+      <v1:committer xsi:type="v1:PARTY_IDENTIFIED">
+        <v1:name>UERJ SUS OpenEHR Builder</v1:name>
+      </v1:committer>
+      <v1:time_committed>
+        <v1:value>2014-06-02T15:21:03,468</v1:value>
+      </v1:time_committed>
+      <v1:change_type>
+        <v1:value>creation</v1:value>
+        <v1:defining_code>
+          <v1:terminology_id>
+            <v1:value>openehr</v1:value>
+          </v1:terminology_id>
+          <v1:code_string>249</v1:code_string>
+        </v1:defining_code>
+      </v1:change_type>
+      <v1:description>
+        <v1:value>creation of ehrStatus</v1:value>
+      </v1:description>
+    </v1:commit_audit>
+    <v1:uid>
+      <v1:value>1.5.1.001.211.100.482.339::susehrbuilder.openehr.lampada.uerj.br::1</v1:value>
+    </v1:uid>
+    <v1:data archetype_node_id="openehr-EHR-ITEM_TREE.ehrstatus-susbuilder.v1" xsi:type="v1:EHR_STATUS">
+      <v1:name>
+        <v1:value>EHR Status</v1:value>
+      </v1:name>
+      <v1:uid xsi:type="v1:OBJECT_VERSION_ID">
+        <v1:value>1.5.1.001.211.100.482.339::susehrbuilder.openehr.lampada.uerj.br::1</v1:value>
+      </v1:uid>
+      <v1:archetype_details>
+        <v1:archetype_id>
+          <v1:value>openehr-EHR-ITEM_TREE.ehrstatus-susbuilder.v1</v1:value>
+        </v1:archetype_id>
+        <v1:rm_version>1.0.2</v1:rm_version>
+      </v1:archetype_details>
+      <v1:subject>
+        <v1:external_ref>
+          <v1:id xsi:type="v1:HIER_OBJECT_ID">
+            <v1:value>1.1.1.001.211.100.482.339</v1:value>
+          </v1:id>
+          <v1:type>PARTY</v1:type>
+        </v1:external_ref>
+      </v1:subject>
+      <v1:is_queryable>true</v1:is_queryable>
+      <v1:is_modifiable>false</v1:is_modifiable>
+    </v1:data>
+    <v1:lifecycle_state>
+      <v1:value>complete</v1:value>
+      <v1:defining_code>
+        <v1:terminology_id>
+          <v1:value>openehr</v1:value>
+        </v1:terminology_id>
+        <v1:code_string>532</v1:code_string>
+      </v1:defining_code>
+    </v1:lifecycle_state>
+  </v1:versions>
+</v1:versioned_ehr_status>

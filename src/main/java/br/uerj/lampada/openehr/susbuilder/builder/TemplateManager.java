@@ -46,12 +46,12 @@ public class TemplateManager {
 	private Composition composition;
 	private CompositionPopulator compositionPopulator;
 
-//	private String patientId;
+	// private String patientId;
 
 	public TemplateManager(String template, String archetypeRepoPath,
 			String templateRepoPath, boolean isPersistent)
 			throws FlatteningException, Exception {
-		
+
 		ArchetypeAndTemplateRepository arTeRep = new ArchetypeAndTemplateRepository(
 				new File(archetypeRepoPath), adlExtension, new File(
 						templateRepoPath), oetExtension);
@@ -87,31 +87,6 @@ public class TemplateManager {
 		this.archetypeMap = archetypeMap;
 		initiateCompositionManager(LANGUAGE, CHARSET, templateId, RMVERSION,
 				SETTING, COUNTRY, category, PARTY);
-	}
-
-	private void initiateCompositionManager(CodePhrase lang,
-			CodePhrase charset, TemplateID templateId, String rmVersion,
-			DvCodedText setting, CodePhrase country, DvCodedText category,
-			PartyIdentified party) throws Exception {
-		compositionPopulator = new CompositionPopulator(lang, charset,
-				templateId, rmVersion, setting, country, category, party);
-	}
-
-	private void updateComposition(String uid, CompositionContent content)
-			throws Exception {
-		// TODO update patient id
-		Map<String, Object> acont = content.getContent();
-
-		composition.set("/uid", acont);
-
-		for (String path : acont.keySet()) {
-			Object cont = acont.get(path);
-			if (cont == null) {
-				cont = new DvCodedText("unknown", new CodePhrase(
-						TerminologyService.OPENEHR, "253"));
-			}
-			composition.set(path, cont);
-		}
 	}
 
 	public void cleanTemplate(Map<String, PathState> pathState) {
@@ -198,5 +173,30 @@ public class TemplateManager {
 
 	public void setArchetypeMap(Map<String, Archetype> archetypeMap) {
 		this.archetypeMap = archetypeMap;
+	}
+
+	private void initiateCompositionManager(CodePhrase lang,
+			CodePhrase charset, TemplateID templateId, String rmVersion,
+			DvCodedText setting, CodePhrase country, DvCodedText category,
+			PartyIdentified party) throws Exception {
+		compositionPopulator = new CompositionPopulator(lang, charset,
+				templateId, rmVersion, setting, country, category, party);
+	}
+
+	private void updateComposition(String uid, CompositionContent content)
+			throws Exception {
+		// TODO update patient id
+		Map<String, Object> acont = content.getContent();
+
+		composition.set("/uid", acont);
+
+		for (String path : acont.keySet()) {
+			Object cont = acont.get(path);
+			if (cont == null) {
+				cont = new DvCodedText("unknown", new CodePhrase(
+						TerminologyService.OPENEHR, "253"));
+			}
+			composition.set(path, cont);
+		}
 	}
 }

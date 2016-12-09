@@ -177,7 +177,7 @@ ontology
 					description = <"A framework for the classification and grading of malignancies using the TNM classification system.">
 				>
 				["at0000.1"] = <
-					text = <"Tumour - TNM Cancer staging!">
+					text = <"Tumour - TNM Cancer staging">
 					description = <"A framework for the classification and grading of malignancies using the TNM classification system.!">
 				>
 				["at0002"] = <

@@ -26,15 +26,6 @@ import java.util.Map;
 public class TestTerminologyService implements TerminologyService {
 
 	/**
-	 * Create a new instance of test terminology service
-	 * 
-	 * @return
-	 */
-	public static TestTerminologyService getInstance() {
-		return new TestTerminologyService();
-	}
-
-	/**
 	 * Returns a CodeSetAccess of given name
 	 * 
 	 * @param name
@@ -111,6 +102,15 @@ public class TestTerminologyService implements TerminologyService {
 	public List<String> terminologyIdentifiers() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * Create a new instance of test terminology service
+	 * 
+	 * @return
+	 */
+	public static TestTerminologyService getInstance() {
+		return new TestTerminologyService();
 	}
 }
 

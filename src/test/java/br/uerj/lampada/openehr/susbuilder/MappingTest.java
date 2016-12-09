@@ -1,9 +1,5 @@
 package br.uerj.lampada.openehr.susbuilder;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -19,10 +15,9 @@ import org.openehr.rm.datatypes.basic.ReferenceModelName;
 import br.uerj.lampada.openehr.susbuilder.builder.TemplateManager;
 import br.uerj.lampada.openehr.susbuilder.database.DBHandler;
 import br.uerj.lampada.openehr.susbuilder.database.ReadInstance;
-import br.uerj.lampada.openehr.susbuilder.mapping.PathMapping;
 import br.uerj.lampada.openehr.susbuilder.mapping.Mapping;
+import br.uerj.lampada.openehr.susbuilder.mapping.PathMapping;
 import br.uerj.lampada.openehr.susbuilder.mapping.PathMetadata;
-import br.uerj.lampada.openehr.susbuilder.terminology.Terminology;
 import br.uerj.lampada.openehr.susbuilder.utils.Constants;
 
 // all paths are mapped or mapped paths exist
@@ -33,51 +28,79 @@ import br.uerj.lampada.openehr.susbuilder.utils.Constants;
 
 public class MappingTest extends TestCase {
 
-	private static String archetypeRepository;
-	private static String templateRepository;
-	private static String terminologyFile;
-	
-	private static String builderConfig = "builder.properties";
-
-	private static Terminology terminology = new Terminology();
-	static {
-		
-		Properties props = new Properties();
-		try {
-			props.load(new FileInputStream(builderConfig));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		archetypeRepository = props.getProperty("archetype.repository");		
-		templateRepository = props.getProperty("template.repository");
-		terminologyFile = props.getProperty("terminology.file");
-		
-		try {
-			terminology.load(MappingTest.class.getResourceAsStream(terminologyFile));
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-	}
 	private DBHandler db;
-
 	private List<MultiKey> orderedKey;
 
 	private PathMapping pathMapping;
 
-	public MappingTest() {
+	private static List<String> archetypeDefault;
+	static {
+		archetypeDefault = new ArrayList<String>();
+		archetypeDefault.add("time");
+	}
+
+	public MappingTest(String name) throws Exception {
+		super(name);
+	}
+
+	public void testBariatricSurgery() throws Exception {
+		String template = Constants.BARIATRIC_SURGERY;
+		setPathMap(template);
+		test(template);
+	}
+
+	public void testChemotherapy() throws Exception {
+		String template = Constants.CHEMOTHERAPY;
+		setPathMap(template);
+		test(template);
+	}
+
+	public void testDemographicData() throws Exception {
+		String template = Constants.DEMOGRAPHIC_DATA;
+		setPathMap(template);
+		test(template);
+	}
+
+	public void testHospitalisation() throws Exception {
+		String template = Constants.HOSPITALISATION;
+		setPathMap(template);
+		test(template);
+	}
+
+	public void testMedication() throws Exception {
+		String template = Constants.MEDICATION;
+		setPathMap(template);
+		test(template);
+	}
+
+	public void testNephrology() throws Exception {
+		String template = Constants.NEPHROLOGY;
+		setPathMap(template);
+		test(template);
+	}
+
+	public void testOutpatientVarious() throws Exception {
+		String template = Constants.MISCELLANEOUS;
+		setPathMap(template);
+		test(template);
+	}
+
+	public void testRadiotherapy() throws Exception {
+		String template = Constants.RADIOTHERAPY;
+		setPathMap(template);
+		test(template);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	@Override
+	protected void setUp() throws Exception {
 		Properties props = new Properties();
-		try {
-			props.load(MappingTest.class
-					.getResourceAsStream(builderConfig));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		props.load(MappingTest.class
+				.getResourceAsStream(Constants.builderConfig));
 
 		String url = props.getProperty("db.url");
 		String username = props.getProperty("db.username");
@@ -86,12 +109,27 @@ public class MappingTest extends TestCase {
 		db = new DBHandler(url, username, password);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see junit.framework.TestCase#tearDown()
+	 */
+	@Override
+	protected void tearDown() throws Exception {
+		super.tearDown();
+	}
+
 	private List<String> hasPathTerminology(String template) {
 		List<String> paths = new ArrayList<String>();
+		List<String> exceptionPath = new ArrayList<String>();
+		exceptionPath.add("time");
+		exceptionPath
+				.add("/content[openEHR-EHR-ADMIN_ENTRY.demographic_data.v1]/data[at0001]/items[at0005]/value");
 		for (String path : Mapping.getColumnMap(template).keySet()) {
 			PathMetadata pm = pathMapping.getPathMapping().get(path);
-			if (ReferenceModelName.DV_CODED_TEXT.getName().equals(
-					pm.getDataType())
+			if (!exceptionPath.contains(path)
+					&& ReferenceModelName.DV_CODED_TEXT.getName().equals(
+							pm.getDataType())
 					&& pm.getTerminologyName() == null) {
 				paths.add(path);
 			}
@@ -101,11 +139,15 @@ public class MappingTest extends TestCase {
 
 	private List<String> hasPathUnit(String template) {
 		List<String> paths = new ArrayList<String>();
+		List<String> exceptionPath = new ArrayList<String>();
+		exceptionPath.add("time");
+		exceptionPath
+				.add("/content[openEHR-EHR-ADMIN_ENTRY.demographic_data.v1]/data[at0001]/items[at0005]/value");
 		for (String path : Mapping.getColumnMap(template).keySet()) {
 			PathMetadata pm = pathMapping.getPathMapping().get(path);
-			if (ReferenceModelName.DV_QUANTITY.getName().equals(
-					pm.getDataType())
-					&& pm.getUnit() == null) {
+			if (!exceptionPath.contains(path)
+					&& ReferenceModelName.DV_QUANTITY.getName().equals(
+							pm.getDataType()) && pm.getUnit() == null) {
 				paths.add(path);
 			}
 		}
@@ -120,7 +162,7 @@ public class MappingTest extends TestCase {
 		if (!Constants.templatesAPAC.contains(template)) {
 			isAIH = true;
 		}
-		ReadInstance ri = new ReadInstance(isAIH);
+		ReadInstance ri = new ReadInstance(isAIH, db);
 		for (String path : Mapping.getColumnMap(template).keySet()) {
 			PathMetadata pm = pathMapping.getPathMapping().get(path);
 			String termName = pm.getTerminologyName();
@@ -133,15 +175,15 @@ public class MappingTest extends TestCase {
 					} else {
 						testCol = (String) column;
 					}
-					ri.column(template, db, testCol);
-				} catch (SQLException e) {
+					ri.column(template, testCol);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 
 				List<String> results = ri.retrieveSingleResultToList();
 				for (String code : results) {
 					if ((!code.trim().equals(""))
-							&& terminology.getText(termName, code) == null
+							&& Constants.terminology.getText(termName, code) == null
 							&& (pm.getNullValues() == null || !pm
 									.getNullValues().contains(code.trim()))) {
 						orderedKey.add(new MultiKey(termName, code));
@@ -156,7 +198,8 @@ public class MappingTest extends TestCase {
 	private List<String> isPathMapped(String template) {
 		List<String> paths = new ArrayList<String>();
 		for (String path : Mapping.getColumnMap(template).keySet()) {
-			if (!pathMapping.getPathMapping().containsKey(path)) {
+			if (!pathMapping.getPathMapping().containsKey(path)
+					&& !archetypeDefault.contains(path)) {
 				paths.add(path);
 			}
 		}
@@ -200,8 +243,6 @@ public class MappingTest extends TestCase {
 
 	private void setPathMap(String template) {
 
-		String templateFilename = templateRepository + "/" + template + ".oet"; // Reads
-																				// template
 		TemplateManager tc;
 		boolean isPersistent = false;
 		if (template.equals(Constants.DEMOGRAPHIC_DATA)) {
@@ -209,8 +250,8 @@ public class MappingTest extends TestCase {
 		}
 
 		try {
-			tc = new TemplateManager(templateFilename, archetypeRepository,
-					templateRepository, isPersistent);
+			tc = new TemplateManager(template, Constants.archetypeRepository,
+					Constants.templateRepository, isPersistent);
 			pathMapping = new PathMapping(template, tc.getArchetype(),
 					tc.getArchetypeMap());
 		} catch (FlatteningException e) {
@@ -234,57 +275,9 @@ public class MappingTest extends TestCase {
 		assertTrue(paths.size() == 0);
 
 		// Enable this to test full database mapping
-//		MultiKeyMap results = isDataMapped(template);
-//		printTerminologyMapping(template, results,
-//				"Data missing terminology map");
-//		assertTrue(results.isEmpty());
-	}
-
-	public void testBariatricSurgery() throws Exception {
-		String template = Constants.BARIATRIC_SURGERY;
-		setPathMap(template);
-		test(template);
-	}
-
-	public void testChemotherapy() throws Exception {
-		String template = Constants.CHEMOTHERAPY;
-		setPathMap(template);
-		test(template);
-	}
-
-	public void testDemographicData() throws Exception {
-		String template = Constants.DEMOGRAPHIC_DATA;
-		setPathMap(template);
-		test(template);
-	}
-
-	public void testHospitalization() throws Exception {
-		String template = Constants.HOSPITALIZATION;
-		setPathMap(template);
-		test(template);
-	}
-
-	public void testMedicines() throws Exception {
-		String template = Constants.MEDICINES;
-		setPathMap(template);
-		test(template);
-	}
-
-	public void testNephrology() throws Exception {
-		String template = Constants.NEPHROLOGY;
-		setPathMap(template);
-		test(template);
-	}
-
-	public void testOutpatientVarious() throws Exception {
-		String template = Constants.MISCELLANEOUS;
-		setPathMap(template);
-		test(template);
-	}
-
-	public void testRadiotherapy() throws Exception {
-		String template = Constants.RADIOTHERAPY;
-		setPathMap(template);
-		test(template);
+		// MultiKeyMap results = isDataMapped(template);
+		// printTerminologyMapping(template, results,
+		// "Data missing terminology map");
+		// assertTrue(results.isEmpty());
 	}
 }

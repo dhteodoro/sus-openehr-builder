@@ -105,89 +105,68 @@ public class JSONSerializer {
 		// outputter.setFormat(Format.getPrettyFormat().setEncoding(encoding.name()));
 	}
 
-	private String getUpperCaseWithUnderscoreFromCamelCase(String str) {
-		if (str == null || str.length() == 0) {
-			return str;
-		}
-
-		StringBuffer result = new StringBuffer();
-
-		char prevChar = 'A'; // init with an upper case letter
-		/*
-		 * Change underscore to space, insert space before capitals
-		 */
-		for (int i = 0; i < str.length(); i++) {
-			char c = str.charAt(i);
-			if (!Character.isUpperCase(prevChar) && !(prevChar == '_')
-					&& Character.isLetter(c) && Character.isUpperCase(c)) {
-				result.append("_");
-				result.append(Character.toUpperCase(c));
-			} else {
-				result.append(Character.toUpperCase(c));
-			}
-			prevChar = c;
-		}
-
-		return result.toString();
-
+	/**
+	 * Output given archetype as string in XML format
+	 * 
+	 * @param archetype
+	 * @return a string in XML format
+	 * @throws IOException
+	 */
+	public String output(Archetype archetype) throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		output(archetype, baos);
+		return baos.toString(encoding.name());
 	}
 
-	private void printCodePhrase(CodePhrase cp, Element out) {
-		if (cp == null) {
-			return;
-		}
+	/**
+	 * Output given archetype to Document
+	 * 
+	 * @param archetype
+	 * @param out
+	 * @throws IOException
+	 */
+	public void output(Archetype archetype, Document out) {
+		Element rootElement = new Element("archetype", defaultNamespace);
+		rootElement.addNamespaceDeclaration(xsiNamespace);
+		rootElement.addNamespaceDeclaration(xsdNamespace);
 
-		Element terminologyId = new Element("terminology_id", defaultNamespace);
-		out.getChildren().add(terminologyId);
-		printString("value", cp.getTerminologyId().getValue(), terminologyId);
-
-		printString("code_string", cp.getCodeString(), out);
+		out.setRootElement(rootElement);
+		output(archetype, rootElement);
 	}
 
-	private void printString(String label, String value, Element out) {
-		printString(label, value, out, false);
+	/**
+	 * Output given archetype to writer
+	 * 
+	 * @param archetype
+	 * @param out
+	 * @throws IOException
+	 */
+	public void output(Archetype archetype, Element out) {
+		printHeader(archetype, out);
+		printDefinition(archetype.getDefinition(), out);
+		printOntology(archetype.getOntology(), archetype.getConcept(), out);
 	}
 
-	private void printString(String label, String value, Element out,
-			boolean addXSDStringType) {
-		Element elm = new Element(label, defaultNamespace);
-		if (addXSDStringType) {
-			elm.setAttribute("type", "xsd:string", xsiNamespace); // the type is
-																	// expected
-																	// here.
+	/**
+	 * Output given archetype to outputStream
+	 * 
+	 * @param archetype
+	 * @param out
+	 * @throws IOException
+	 */
+	public void output(Archetype archetype, OutputStream out)
+			throws IOException {
+		// Document document = new Document();
+		// output(archetype, document);
+		outputter
+				.configure(
+						DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES,
+						false);
+		if (outputter.canSerialize(Archetype.class)) {
+			System.out.println("Cannot serialize: "
+					+ Archetype.class.toString());
 		}
-		out.getChildren().add(elm);
-		if (value != null) {
-			elm.setText(value);
-		}
-	}
-
-	private void printStringList(String label, List<String> list, Element out) {
-
-		if (list == null || list.isEmpty()) {
-			return;
-		}
-
-		for (int i = 0, j = list.size(); i < j; i++) {
-			Element elm = new Element(label, defaultNamespace);
-			out.getChildren().add(elm);
-			elm.setText(list.get(i));
-		}
-	}
-
-	private void printStringMap(String label, Map<String, String> map,
-			Element out) {
-
-		if (map != null && !map.isEmpty()) {
-			for (String key : map.keySet()) {
-				Element elm = new Element(label, defaultNamespace);
-				out.getChildren().add(elm);
-				elm.setAttribute("id", key);
-				if (map.get(key) != null) {
-					elm.setText(map.get(key));
-				}
-			}
-		}
+		outputter.writeValue(out, archetype);
 	}
 
 	protected void printArchetypeInternalRef(ArchetypeInternalRef ref,
@@ -1059,68 +1038,89 @@ public class JSONSerializer {
 		}
 	}
 
-	/**
-	 * Output given archetype as string in XML format
-	 * 
-	 * @param archetype
-	 * @return a string in XML format
-	 * @throws IOException
-	 */
-	public String output(Archetype archetype) throws IOException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		output(archetype, baos);
-		return baos.toString(encoding.name());
-	}
-
-	/**
-	 * Output given archetype to Document
-	 * 
-	 * @param archetype
-	 * @param out
-	 * @throws IOException
-	 */
-	public void output(Archetype archetype, Document out) {
-		Element rootElement = new Element("archetype", defaultNamespace);
-		rootElement.addNamespaceDeclaration(xsiNamespace);
-		rootElement.addNamespaceDeclaration(xsdNamespace);
-
-		out.setRootElement(rootElement);
-		output(archetype, rootElement);
-	}
-
-	/**
-	 * Output given archetype to writer
-	 * 
-	 * @param archetype
-	 * @param out
-	 * @throws IOException
-	 */
-	public void output(Archetype archetype, Element out) {
-		printHeader(archetype, out);
-		printDefinition(archetype.getDefinition(), out);
-		printOntology(archetype.getOntology(), archetype.getConcept(), out);
-	}
-
-	/**
-	 * Output given archetype to outputStream
-	 * 
-	 * @param archetype
-	 * @param out
-	 * @throws IOException
-	 */
-	public void output(Archetype archetype, OutputStream out)
-			throws IOException {
-		// Document document = new Document();
-		// output(archetype, document);
-		outputter
-				.configure(
-						DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES,
-						false);
-		if (outputter.canSerialize(Archetype.class)) {
-			System.out.println("Cannot serialize: "
-					+ Archetype.class.toString());
+	private String getUpperCaseWithUnderscoreFromCamelCase(String str) {
+		if (str == null || str.length() == 0) {
+			return str;
 		}
-		outputter.writeValue(out, archetype);
+
+		StringBuffer result = new StringBuffer();
+
+		char prevChar = 'A'; // init with an upper case letter
+		/*
+		 * Change underscore to space, insert space before capitals
+		 */
+		for (int i = 0; i < str.length(); i++) {
+			char c = str.charAt(i);
+			if (!Character.isUpperCase(prevChar) && !(prevChar == '_')
+					&& Character.isLetter(c) && Character.isUpperCase(c)) {
+				result.append("_");
+				result.append(Character.toUpperCase(c));
+			} else {
+				result.append(Character.toUpperCase(c));
+			}
+			prevChar = c;
+		}
+
+		return result.toString();
+
+	}
+
+	private void printCodePhrase(CodePhrase cp, Element out) {
+		if (cp == null) {
+			return;
+		}
+
+		Element terminologyId = new Element("terminology_id", defaultNamespace);
+		out.getChildren().add(terminologyId);
+		printString("value", cp.getTerminologyId().getValue(), terminologyId);
+
+		printString("code_string", cp.getCodeString(), out);
+	}
+
+	private void printString(String label, String value, Element out) {
+		printString(label, value, out, false);
+	}
+
+	private void printString(String label, String value, Element out,
+			boolean addXSDStringType) {
+		Element elm = new Element(label, defaultNamespace);
+		if (addXSDStringType) {
+			elm.setAttribute("type", "xsd:string", xsiNamespace); // the type is
+																	// expected
+																	// here.
+		}
+		out.getChildren().add(elm);
+		if (value != null) {
+			elm.setText(value);
+		}
+	}
+
+	private void printStringList(String label, List<String> list, Element out) {
+
+		if (list == null || list.isEmpty()) {
+			return;
+		}
+
+		for (int i = 0, j = list.size(); i < j; i++) {
+			Element elm = new Element(label, defaultNamespace);
+			out.getChildren().add(elm);
+			elm.setText(list.get(i));
+		}
+	}
+
+	private void printStringMap(String label, Map<String, String> map,
+			Element out) {
+
+		if (map != null && !map.isEmpty()) {
+			for (String key : map.keySet()) {
+				Element elm = new Element(label, defaultNamespace);
+				out.getChildren().add(elm);
+				elm.setAttribute("id", key);
+				if (map.get(key) != null) {
+					elm.setText(map.get(key));
+				}
+			}
+		}
 	}
 }
 

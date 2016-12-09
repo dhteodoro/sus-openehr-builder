@@ -179,6 +179,31 @@ public class CompositionPopulator {
 		this.termMap = new TermMap();
 	}
 
+	/**
+	 * Create RM object tree with specified template
+	 * 
+	 * @param patientId
+	 * 
+	 * @param archetype
+	 * @param templateId
+	 * @param archetypeMap
+	 * @param compositionData
+	 *            data that will fill in the composition slots
+	 * @param strategy
+	 * @return
+	 * @throws Exception
+	 */
+	public Object create(String patientId, String uid, Archetype archetype,
+			Map<String, Archetype> archetypeMap,
+			Map<String, Object> compositionData,
+			Map<String, PathState> pathState) throws Exception {
+		this.uid = new HierObjectID(uid);
+		this.patientId = patientId;
+		this.compositionData = compositionData;
+		return createComplexObject(archetype.getDefinition(), archetype,
+				archetypeMap, pathState, null, null);
+	}
+
 	private void addEntryValues(Map<String, Object> valueMap,
 			Archetype archetype) throws Exception {
 
@@ -842,7 +867,7 @@ public class CompositionPopulator {
 
 			addEntryValues(valueMap, archetype);
 			if (!valueMap.containsKey(TIME)) {
-				if(compositionData.containsKey("time")) {
+				if (compositionData.containsKey("time")) {
 					valueMap.put(TIME, compositionData.get("time"));
 				} else {
 					valueMap.put(TIME, new DvDateTime());
@@ -989,30 +1014,5 @@ public class CompositionPopulator {
 	private PartySelf subject() throws Exception {
 		PartyRef subject = new PartyRef(new HierObjectID(patientId), "PARTY");
 		return new PartySelf(subject);
-	}
-
-	/**
-	 * Create RM object tree with specified template
-	 * 
-	 * @param patientId
-	 * 
-	 * @param archetype
-	 * @param templateId
-	 * @param archetypeMap
-	 * @param compositionData
-	 *            data that will fill in the composition slots
-	 * @param strategy
-	 * @return
-	 * @throws Exception
-	 */
-	public Object create(String patientId, String uid, Archetype archetype,
-			Map<String, Archetype> archetypeMap,
-			Map<String, Object> compositionData,
-			Map<String, PathState> pathState) throws Exception {
-		this.uid = new HierObjectID(uid);
-		this.patientId = patientId;
-		this.compositionData = compositionData;
-		return createComplexObject(archetype.getDefinition(), archetype,
-				archetypeMap, pathState, null, null);
 	}
 }

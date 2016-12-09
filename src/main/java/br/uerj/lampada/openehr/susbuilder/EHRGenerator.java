@@ -65,7 +65,7 @@ public class EHRGenerator {
 
 	private PrintWriter failedFile;
 
-	private List<String> failedIds;
+	private int failedIds;
 	private String format;
 
 	private boolean isAIH;
@@ -74,7 +74,7 @@ public class EHRGenerator {
 	private EHRObjectPrinter printer;
 
 	private PrintWriter succeededFile;
-	private List<String> successfulIds;
+	private int successfulIds;
 
 	// Template skeletons
 	private Map<String, TemplateManager> templateManagers;
@@ -82,8 +82,8 @@ public class EHRGenerator {
 
 	public EHRGenerator(String type, String format, String outputFolder,
 			boolean isAIH) throws Exception {
-		this.successfulIds = new ArrayList<String>();
-		this.failedIds = new ArrayList<String>();
+		this.successfulIds = 0;
+		this.failedIds = 0;
 
 		this.type = type;
 		this.format = format;
@@ -98,6 +98,85 @@ public class EHRGenerator {
 		this.initTemplates();
 	}
 
+	public void generateEHRs(List<String> patients, Integer dirSize)
+			throws FlatteningException, Exception {
+
+		String ehrDir = null;
+		Date date = new Date();
+		// initiate the classes to populate and print the ehr objects
+		populator = new CompositionManager(templateManagers,
+				compositionContents, isAIH);
+		if (type.equals(Constants.EHR_STR)) {
+			printer = new EHRPrinter(outputFolder, format);
+		} else if (type.equals(Constants.VERSION_STR)) {
+			printer = new VersionPrinter(outputFolder, format);
+		} else if (type.equals(Constants.COMPOSITION_STR)) {
+			printer = new CompositionPrinter(outputFolder, format);
+		} else {
+			System.err.println("Unknow EHR object: " + type);
+			System.exit(1);
+		}
+
+		// for each patient id
+		// 1) populate the patient objects (ehr, version or composition)
+		// 2) write the object to a file
+
+		int count = 1;
+		int folderCount = 1;
+		if (dirSize > 0) {
+			ehrDir = outputFolder + "/" + type + "/" + folderCount;
+		}
+		for (String patient : patients) {
+			try {
+
+				String uuid = CompositionManager.dumpString(patient);
+
+				if (dirSize <= 0) {
+					ehrDir = outputFolder + "/" + type + "/"
+							+ uuid.replaceAll("\\.", "/");
+				}
+
+				printer.setOutputFolder(ehrDir);
+
+				List<Composition> compositions = populator.buildCompositions(
+						patient, uuid);
+
+				if (compositions != null && compositions.size() > 0) {
+					printer.writeOpenEHRObject(uuid, ehrDir, compositions);
+
+					succeededFile.println(patient);
+					successfulIds++;
+				} else {
+					date = new Date();
+					System.err.println("[" + new Timestamp(date.getTime())
+							+ "] [" + patient
+							+ "]:: No composition created for patient");
+				}
+
+			} catch (Exception e) {
+				// e.printStackTrace();
+				failedFile.println(patient);
+				failedIds++;
+				date = new Date();
+				System.err.println("[" + new Timestamp(date.getTime()) + "] ["
+						+ patient + "]::" + e.getMessage());
+			}
+
+			if (count % Constants.logStep == 0) {
+				date = new Date();
+				System.out.println("[" + new Timestamp(date.getTime()) + "] "
+						+ count + " EHRs processed");
+			}
+
+			if (dirSize > 0 && count % 1000 == 0) {
+				folderCount++;
+				ehrDir = outputFolder + "/" + type + "/" + folderCount;
+			}
+			count++;
+		}
+		closeLog();
+	}
+
 	/**
 	 * Close log files and print ending messages
 	 * 
@@ -108,18 +187,13 @@ public class EHRGenerator {
 
 		Date date = new Date();
 
-		if (successfulIds != null && !successfulIds.isEmpty()) {
-			System.out.println("[" + new Timestamp(date.getTime())
-					+ "] EHRGenerator created " + successfulIds.size()
-					+ " EHRs successfully");
-		}
+		System.out.println("[" + new Timestamp(date.getTime())
+				+ "] EHRGenerator created " + successfulIds
+				+ " EHRs successfully");
 
 		date = new Date();
-		if (failedIds != null && !failedIds.isEmpty()) {
-			System.out.println("[" + new Timestamp(date.getTime())
-					+ "] EHRGenerator failed to create " + failedIds.size()
-					+ " EHRs");
-		}
+		System.out.println("[" + new Timestamp(date.getTime())
+				+ "] EHRGenerator failed to create " + failedIds + " EHRs");
 	}
 
 	/**
@@ -129,24 +203,11 @@ public class EHRGenerator {
 	private void createDirectories() {
 
 		List<String> directories = new ArrayList<String>();
-		if (type.equals(Constants.EHR_STR)) {
-			directories.add(Constants.EHR_STR + "/" + Constants.EHR_STR);
-			directories.add(Constants.EHR_STR + "/" + Constants.EHRACCESS_STR);
-			directories.add(Constants.EHR_STR + "/" + Constants.EHRSTATUS_STR);
-			directories
-					.add(Constants.EHR_STR + "/" + Constants.COMPOSITION_STR);
-			directories.add(Constants.EHR_STR + "/"
-					+ Constants.CONTRIBUTION_STR);
-		} else {
-			directories.add(type);
-		}
 
-		for (String dir : directories) {
-			File file = new File(outputFolder + "/" + dir);
-			// if the directory does not exist, create it
-			if (!file.exists()) {
-				file.mkdirs();
-			}
+		File file = new File(outputFolder + "/" + type);
+
+		if (!file.exists()) {
+			file.mkdirs();
 		}
 	}
 
@@ -208,65 +269,13 @@ public class EHRGenerator {
 					Constants.archetypeRepository,
 					Constants.templateRepository, isPersistent);
 			CompositionContent inst = new CompositionContent(new PathMapping(
-					template, comp.getArchetype(), comp.getArchetypeMap()),
-					Constants.terminology);
+					template, comp.getArchetype(), comp.getArchetypeMap()));
 
 			comp.cleanTemplate(inst.getPathState());
 
 			templateManagers.put(template, comp);
 			compositionContents.put(template, inst);
 		}
-	}
-
-	public void generateEHRs(List<String> patients) throws FlatteningException,
-			Exception {
-
-		Date date = new Date();
-		// initiate the classes to populate and print the ehr objects
-		populator = new CompositionManager(templateManagers,
-				compositionContents, isAIH);
-		if (type.equals(Constants.EHR_STR)) {
-			printer = new EHRPrinter(outputFolder, format);
-		} else if (type.equals(Constants.VERSION_STR)) {
-			printer = new VersionPrinter(outputFolder, format);
-		} else if (type.equals(Constants.COMPOSITION_STR)) {
-			printer = new CompositionPrinter(outputFolder, format);
-		} else {
-			System.err.println("Unknow EHR object: " + type);
-			System.exit(1);
-		}
-
-		// for each patient id
-		// 1) populate the patient objects (ehr, version or composition)
-		// 2) write the object to a file
-
-		int count = 1;
-		for (String patient : patients) {
-			try {
-
-				String uuid = CompositionManager.dumpString(patient);
-				List<Composition> compositions = populator.buildCompositions(
-						patient, uuid);
-
-				printer.writeOpenEHRObject(uuid, compositions);
-
-				succeededFile.println(patient);
-				successfulIds.add(patient);
-			} catch (Exception e) {
-				// e.printStackTrace();
-				failedFile.println(patient);
-				failedIds.add(patient);
-				date = new Date();
-				System.err.println("[" + new Timestamp(date.getTime()) + "] [" + patient + "]::" + e.getMessage());
-			}
-
-			if (count % Constants.logStep == 0) {
-				date = new Date();
-				System.out.println("[" + new Timestamp(date.getTime()) + "] " + count + " EHRs processed");
-			}
-			count++;
-		}
-		closeLog();
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -298,6 +307,8 @@ public class EHRGenerator {
 				"Type of output object. originally implemented: composition, version and ehr.");
 		options.addOption("f", "format", true,
 				"Output format. Orinally implemented: JSON and XML.");
+		options.addOption("d", "fix-dir-size", true,
+				"Set directory size (number of patients).");
 		options.addOption("i", "aih", false,
 				"If AIH data, APAC is assumed as default.");
 		options.addOption("h", "help", false, "Print help statement.");
@@ -336,14 +347,25 @@ public class EHRGenerator {
 				.getOptionValue("ehr-dir").trim() : new String("./ehr_folder");
 
 		String format = (line.hasOption("f") || line.hasOption("format")) ? line
-				.getOptionValue("format").toLowerCase().trim() : new String("xml");
+				.getOptionValue("format").toLowerCase().trim()
+				: new String("xml");
 
 		String type = (line.hasOption("t") || line.hasOption("type")) ? line
-				.getOptionValue("type").toLowerCase().trim() : new String("ehr");
+				.getOptionValue("type").toLowerCase().trim()
+				: new String("ehr");
 
 		boolean isAIH = false;
 		if (line.hasOption("i") || line.hasOption("aih")) {
 			isAIH = true;
+		}
+
+		Integer dirSize = (line.hasOption("d") || line
+				.hasOption("fix-dir-size")) ? Integer.parseInt(line
+				.getOptionValue("fix-dir-size").trim()) : new Integer(-1);
+
+		if (dirSize > 0 && dirSize < 100) {
+			System.out.println("[" + new Timestamp(date.getTime())
+					+ "] WARN: directory size too small ");
 		}
 
 		// read the list of patients from the input file
@@ -354,7 +376,7 @@ public class EHRGenerator {
 				isAIH);
 
 		// do the work
-		generator.generateEHRs(patients);
+		generator.generateEHRs(patients, dirSize);
 
 		date = new Date();
 		System.out.println("[" + new Timestamp(date.getTime()) + "] Finished "

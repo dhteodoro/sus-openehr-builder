@@ -29,9 +29,8 @@ import org.openehr.rm.datatypes.text.DvCodedText;
  */
 public class TestCodeSetAccess implements CodeSetAccess {
 
-	static final Set<CodePhrase> allCodes;
-
 	public static final CodePhrase ENGLISH = new CodePhrase("test", "en");
+
 	public static final CodePhrase LATIN_1 = new CodePhrase("test",
 			"iso-8859-1");
 
@@ -49,6 +48,7 @@ public class TestCodeSetAccess implements CodeSetAccess {
 	public static final DvCodedText EVENT = new DvCodedText("event", ENGLISH,
 			LATIN_1, new CodePhrase("test", "event"),
 			TestTerminologyService.getInstance());
+
 	public static final DvCodedText ISM_ACTIVE = new DvCodedText("ism states",
 			ENGLISH, LATIN_1, new CodePhrase("test", "active"),
 			TestTerminologyService.getInstance());
@@ -63,6 +63,8 @@ public class TestCodeSetAccess implements CodeSetAccess {
 	public static final DvCodedText SETTING = new DvCodedText("setting",
 			ENGLISH, LATIN_1, new CodePhrase("test", "setting_code"),
 			TestTerminologyService.getInstance());
+
+	static final Set<CodePhrase> allCodes;
 
 	static {
 		allCodes = new HashSet<CodePhrase>();

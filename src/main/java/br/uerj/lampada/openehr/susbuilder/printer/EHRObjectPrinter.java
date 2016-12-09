@@ -16,8 +16,17 @@ public interface EHRObjectPrinter {
 	/**
 	 * Interface to write EHR objects
 	 * 
-	 * @param patients
+	 * @param uuid
+	 * @param compositions
+	 * @throws Exception
 	 */
-	public void writeOpenEHRObject(String uuid, List<Composition> compositions)
-			throws Exception;
+	public void writeOpenEHRObject(String uuid, String outputFolder,
+			List<Composition> compositions) throws Exception;
+
+	/**
+	 * Interface do set output folder
+	 * 
+	 * @param folder
+	 */
+	public void setOutputFolder(String folder);
 }

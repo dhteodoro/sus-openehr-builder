@@ -3,7 +3,6 @@
  */
 package br.uerj.lampada.openehr.susbuilder.printer.impl;
 
-import java.io.File;
 import java.util.List;
 
 import org.openehr.rm.composition.Composition;
@@ -31,22 +30,16 @@ public class CompositionPrinter extends EHRPrintCore implements
 	 * @param dirName
 	 * @throws Exception
 	 */
-	public void writeOpenEHRObject(String uuid, List<Composition> compositions)
-			throws Exception {
-		String compositionFolder = Constants.COMPOSITION_STR;
+	@Override
+	public void writeOpenEHRObject(String uuid, String outputFolder,
+			List<Composition> compositions) throws Exception {
 		// Write Composition
 		for (int i = 0; i < compositions.size(); i++) {
 			Composition composition = compositions.get(i);
-			String ehrDir = getOutputFolder() + "/" + compositionFolder + "/"
-					+ Constants.EHR_UUID_PREFIX + uuid;
-			File file = new File(ehrDir);
-			// if the directory does not exist, create it
-			if (!file.exists()) {
-				file.mkdirs();
-			}
+
 			String docId = Constants.COMPOSITION_UUID_PREFIX + (i + 1) + "."
 					+ uuid;
-			String filename = ehrDir + "/" + docId + "." + getFormat();
+			String filename = outputFolder + "/" + docId + "." + getFormat();
 
 			writeInFormat(composition, filename);
 		}

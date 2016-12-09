@@ -36,6 +36,48 @@ public class PathMapping {
 				null);
 	}
 
+	public void createArchetypeInternalRefObject(ArchetypeInternalRef robj,
+			Archetype archetype, Map<String, Archetype> archetypeMap,
+			String slotPath) throws Exception {
+
+		log.debug("create archetype internal reference object "
+				+ robj.getRmTypeName());
+
+		String pathNodeId = robj.path().replaceAll("\\w+$", "");
+		String logicalNodeId = pathNodeId.replaceAll("^.*"
+				+ archetype.getArchetypeId().getValue() + ".*?/", "/");
+		String targetNodeId = robj.getTargetPath().replaceAll("^/.*/", "");
+		String path = logicalNodeId + "" + targetNodeId;
+		Object obj = archetype.getPathNodeMap().get(path);
+
+		createMap((CComplexObject) obj, archetype, archetypeMap, robj.path()
+				+ "[" + ((CComplexObject) obj).getNodeId() + "]", slotPath);
+	}
+
+	public Map<String, PathMetadata> getPathMapping() {
+		return pathMapping;
+	}
+
+	public PathMetadata getPathMetadata(String path) {
+		return pathMapping.get(path);
+	}
+
+	public Set<String> getPaths() {
+		return pathMapping.keySet();
+	}
+
+	public String getTemplate() {
+		return template;
+	}
+
+	public void putPathMapping(String path, PathMetadata pm) {
+		pathMapping.put(path, pm);
+	}
+
+	public void setTemplate(String template) {
+		this.template = template;
+	}
+
 	private void createArchetypeSlotObject(ArchetypeSlot sobj, Archetype arch,
 			Map<String, Archetype> archetypeMap, String archetypeReference)
 			throws Exception {
@@ -151,48 +193,6 @@ public class PathMapping {
 		pm.setTerminologyName(Mapping.terminologyMap.get(path));
 		pm.setUnit(Mapping.unitMap.get(path));
 		pathMapping.put(path, pm);
-	}
-
-	public void createArchetypeInternalRefObject(ArchetypeInternalRef robj,
-			Archetype archetype, Map<String, Archetype> archetypeMap,
-			String slotPath) throws Exception {
-
-		log.debug("create archetype internal reference object "
-				+ robj.getRmTypeName());
-
-		String pathNodeId = robj.path().replaceAll("\\w+$", "");
-		String logicalNodeId = pathNodeId.replaceAll("^.*"
-				+ archetype.getArchetypeId().getValue() + ".*?/", "/");
-		String targetNodeId = robj.getTargetPath().replaceAll("^/.*/", "");
-		String path = logicalNodeId + "" + targetNodeId;
-		Object obj = archetype.getPathNodeMap().get(path);
-
-		createMap((CComplexObject) obj, archetype, archetypeMap, robj.path()
-				+ "[" + ((CComplexObject) obj).getNodeId() + "]", slotPath);
-	}
-
-	public Map<String, PathMetadata> getPathMapping() {
-		return pathMapping;
-	}
-
-	public void putPathMapping(String path, PathMetadata pm) {
-		pathMapping.put(path, pm);
-	}
-	
-	public PathMetadata getPathMetadata(String path) {
-		return pathMapping.get(path);
-	}
-
-	public Set<String> getPaths() {
-		return pathMapping.keySet();
-	}
-
-	public String getTemplate() {
-		return template;
-	}
-
-	public void setTemplate(String template) {
-		this.template = template;
 	}
 
 	public static String getPath(String path, String archetypeReference,

@@ -3,7 +3,6 @@
  */
 package br.uerj.lampada.openehr.susbuilder.printer.impl;
 
-import java.io.File;
 import java.util.List;
 
 import org.openehr.rm.common.changecontrol.Version;
@@ -33,9 +32,8 @@ public class VersionPrinter extends EHRPrintCore implements EHRObjectPrinter {
 	 * @throws Exception
 	 */
 	@Override
-	public void writeOpenEHRObject(String uuid, List<Composition> compositions)
-			throws Exception {
-		String versionFolder = Constants.VERSION_STR;
+	public void writeOpenEHRObject(String uuid, String outputFolder,
+			List<Composition> compositions) throws Exception {
 
 		String patientId = Constants.EHR_UUID_PREFIX + uuid;
 
@@ -45,16 +43,10 @@ public class VersionPrinter extends EHRPrintCore implements EHRObjectPrinter {
 		// Write Versioned Composition
 		for (int i = 0; i < versions.size(); i++) {
 			Version<Composition> version = versions.get(i);
-			String ehrDir = getOutputFolder() + "/" + versionFolder + "/"
-					+ patientId;
-			File file = new File(ehrDir);
-			// if the directory does not exist, create it
-			if (!file.exists()) {
-				file.mkdirs();
-			}
+
 			String docId = Constants.COMPOSITION_UUID_PREFIX + (i + 1) + "."
 					+ uuid;
-			String filename = ehrDir + "/" + docId + "." + getFormat();
+			String filename = outputFolder + "/" + docId + "." + getFormat();
 
 			writeInFormat(version, filename);
 		}

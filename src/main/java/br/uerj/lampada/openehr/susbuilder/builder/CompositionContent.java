@@ -28,7 +28,7 @@ import br.uerj.lampada.openehr.susbuilder.mapping.Mapping;
 import br.uerj.lampada.openehr.susbuilder.mapping.PathMapping;
 import br.uerj.lampada.openehr.susbuilder.mapping.PathMetadata;
 import br.uerj.lampada.openehr.susbuilder.mapping.PathState;
-import br.uerj.lampada.openehr.susbuilder.terminology.Terminology;
+import br.uerj.lampada.openehr.susbuilder.utils.Constants;
 
 public class CompositionContent {
 
@@ -40,30 +40,75 @@ public class CompositionContent {
 
 	private Map<String, PathState> pathState;
 
-	private Terminology terminology;
-
-	public CompositionContent(PathMapping pathMapping, Terminology terminology) {
+	public CompositionContent(PathMapping pathMapping) {
 		this.content = new HashMap<String, Object>();
 		this.pathState = new HashMap<String, PathState>();
 		this.elementToTree = new HashMap<String, List<String>>();
 
 		this.pathMapping = pathMapping;
-		this.terminology = terminology;
 
 		initiateContent(pathMapping.getTemplate());
 		updatePathState();
 	}
 
-	private Object getDvData(String dbValue, String path) throws Exception {		
-		
+	public Map<String, Object> getContent() {
+		return content;
+	}
+
+	public PathMapping getPathMap() {
+		return pathMapping;
+	}
+
+	public Map<String, PathState> getPathState() {
+		return pathState;
+	}
+
+	public void setPathState(Map<String, PathState> pathState) {
+		this.pathState = pathState;
+	}
+
+	public void updateContent(HashMap<String, Object> dbValues)
+			throws Exception {
+		content = new HashMap<String, Object>();
+		for (String path : dbValues.keySet()) {
+			Object dv = null;
+			Object dbValue = dbValues.get(path);
+
+			if (dbValue instanceof String) {
+				dv = getDvData(((String) dbValue).trim(), path);
+			} else if (dbValue instanceof List) {
+				List<Object> container = new ArrayList<Object>();
+				for (String val : (List<String>) dbValue) {
+					container.add(getDvData(val, path));
+				}
+				dv = container;
+			}
+			content.put(path, dv);
+		}
+		updatePathState();
+	}
+
+	// DV_BOOLEAN("DV_BOOLEAN")
+	// DV_COUNT("DV_COUNT")
+	// DV_QUANTITY("DV_QUANTITY")
+	// DV_PROPORTION("DV_PROPORTION")
+	// DV_TEXT("DV_TEXT")
+	// DV_CODED_TEXT("DV_CODED_TEXT")
+	// DV_ORDINAL("DV_ORDINAL")
+	// CODE_PHRASE("CODE_PHRASE")
+	// DV_DATE_TIME("DV_DATE_TIME")
+	// DV_DURATION("DV_DURATION")
+
+	private Object getDvData(String dbValue, String path) throws Exception {
+
 		PathMetadata pm = pathMapping.getPathMetadata(path);
 
 		Date date = new Date();
-		
-		if(pm == null) {
+
+		if (pm == null) {
 			pm = getPathMetadata(pathMapping.getTemplate(), path);
 		}
-		
+
 		String rmTypeName = pm.getDataType();
 
 		Object dv = null;
@@ -104,10 +149,9 @@ public class CompositionContent {
 						rmTypeName)) {
 					double numerator = parseDouble(dbValue);
 					double denominator = 1;
-					ProportionKind type = ProportionKind.UNITARY;
 					int precision = 0;
-					dv = new DvProportion(numerator, denominator, type,
-							precision);
+					dv = new DvProportion(numerator, denominator,
+							ProportionKind.UNITARY, precision);
 				}
 				// DV_TEXT
 				else if (ReferenceModelName.DV_TEXT.getName()
@@ -115,9 +159,9 @@ public class CompositionContent {
 					String value = dbValue;
 					String name = pm.getTerminologyName();
 					if (name != null) {
-						value = terminology.getText(name, value);
-					} 
-					if (value != null) { 
+						value = Constants.terminology.getText(name, value);
+					}
+					if (value != null) {
 						dv = new DvText(value);
 					}
 				}
@@ -134,14 +178,17 @@ public class CompositionContent {
 					String name = pm.getTerminologyName();
 
 					if (name != null) {
-						if (terminology.getText(name, code) != null) {
-							value = terminology.getText(name, code);
+						if (Constants.terminology.getText(name, code) != null) {
+							value = Constants.terminology.getText(name, code);
 						}
 					} else {
 						name = TERM_DEFAULT;
 					}
 
-					if(value != null || (pm.getNullValues() == null || pm.getNullValues().size() == 0 || ! pm.getNullValues().contains(code))) {
+					if (value != null
+							|| (pm.getNullValues() == null
+									|| pm.getNullValues().size() == 0 || !pm
+									.getNullValues().contains(code))) {
 						CodePhrase definingCode = new CodePhrase(name, code);
 						dv = new DvCodedText(value, definingCode);
 					}
@@ -176,16 +223,36 @@ public class CompositionContent {
 					dv = new DvDuration(value);
 				} else {
 					dv = dbValue;
-//					throw new Exception("Unknown DV type: " + rmTypeName);
+					// throw new Exception("Unknown DV type: " + rmTypeName);
 				}
 			} catch (Exception e) {
 				date = new Date();
-				log.warn("[" + new Timestamp(date.getTime()) + "] Cannot instanciate " + rmTypeName + " for value "
+				log.warn("[" + new Timestamp(date.getTime())
+						+ "] Cannot instanciate " + rmTypeName + " for value "
 						+ dbValue + "(" + pm.getColumn() + ")");
 				return null;
 			}
 		}
 		return dv;
+	}
+
+	private PathMetadata getPathMetadata(String template, String path) {
+
+		PathMetadata pm = new PathMetadata(template);
+
+		pm.setColumn(Mapping.getColumnMap(pm.getTemplate()).get(path));
+		String rmTypeName = "";
+		if (path.matches(".*time.*")) {
+			rmTypeName = ReferenceModelName.DV_DATE_TIME.getName();
+		}
+		;
+		pm.setDataType(rmTypeName);
+		pm.setNullValues(Mapping.nullMap.get(path));
+		pm.setTerminologyName(Mapping.terminologyMap.get(path));
+		pm.setUnit(Mapping.unitMap.get(path));
+		pathMapping.putPathMapping(path, pm);
+
+		return pm;
 	}
 
 	private void initiateContent(String template) {
@@ -225,17 +292,6 @@ public class CompositionContent {
 		String dateTimeSuffix = "T00:00:00-03:00";
 		return parseISODate(dbValue, dateTimeSuffix);
 	}
-
-	// DV_BOOLEAN("DV_BOOLEAN")
-	// DV_COUNT("DV_COUNT")
-	// DV_QUANTITY("DV_QUANTITY")
-	// DV_PROPORTION("DV_PROPORTION")
-	// DV_TEXT("DV_TEXT")
-	// DV_CODED_TEXT("DV_CODED_TEXT")
-	// DV_ORDINAL("DV_ORDINAL")
-	// CODE_PHRASE("CODE_PHRASE")
-	// DV_DATE_TIME("DV_DATE_TIME")
-	// DV_DURATION("DV_DURATION")
 
 	private Double parseDouble(String dbValue) {
 		return Double.parseDouble(dbValue.replaceAll(",", "."));
@@ -277,11 +333,12 @@ public class CompositionContent {
 		if (pathState != null && !pathState.isEmpty()) {
 			for (String path : pathMapping.getPaths()) {
 				boolean isNull = true;
-				if(pathState.containsKey(path)) {
+				if (pathState.containsKey(path)) {
 					if (pathState.get(path).isMapped()) {
 						for (String mappedPath : content.keySet()) {
-							if (elementToTree.containsKey(mappedPath) 
-									&& elementToTree.get(mappedPath).contains(path)
+							if (elementToTree.containsKey(mappedPath)
+									&& elementToTree.get(mappedPath).contains(
+											path)
 									&& content.get(mappedPath) != null) {
 								isNull = false;
 								break;
@@ -315,59 +372,5 @@ public class CompositionContent {
 				pathState.put(path, new PathState(isMapped, true));
 			}
 		}
-	}
-
-	private PathMetadata getPathMetadata(String template, String path) {
-
-		PathMetadata pm = new PathMetadata(template);
-		
-		pm.setColumn(Mapping.getColumnMap(pm.getTemplate()).get(path));
-		String rmTypeName = "";
-		if(path.matches(".*time.*")) {
-			rmTypeName = ReferenceModelName.DV_DATE_TIME.getName();
-		};
-		pm.setDataType(rmTypeName);
-		pm.setNullValues(Mapping.nullMap.get(path));
-		pm.setTerminologyName(Mapping.terminologyMap.get(path));
-		pm.setUnit(Mapping.unitMap.get(path));
-		pathMapping.putPathMapping(path, pm);			
-
-		return pm;
-	}
-	public Map<String, Object> getContent() {
-		return content;
-	}
-
-	public PathMapping getPathMap() {
-		return pathMapping;
-	}
-
-	public Map<String, PathState> getPathState() {
-		return pathState;
-	}
-
-	public void setPathState(Map<String, PathState> pathState) {
-		this.pathState = pathState;
-	}
-
-	public void updateContent(HashMap<String, Object> dbValues)
-			throws Exception {
-		content = new HashMap<String, Object>();
-		for (String path : dbValues.keySet()) {
-			Object dv = null;
-			Object dbValue = dbValues.get(path);
-
-			if (dbValue instanceof String) {
-				dv = getDvData(((String) dbValue).trim(), path);
-			} else if (dbValue instanceof List) {
-				List<Object> container = new ArrayList<Object>();
-				for (String val : (List<String>) dbValue) {
-					container.add(getDvData(val, path));
-				}
-				dv = container;
-			}
-			content.put(path, dv);
-		}
-		updatePathState();
 	}
 }

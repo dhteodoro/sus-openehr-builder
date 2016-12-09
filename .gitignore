@@ -1,3 +1,4 @@
 target.zip
 builder.properties
 target/
+.DS_Store

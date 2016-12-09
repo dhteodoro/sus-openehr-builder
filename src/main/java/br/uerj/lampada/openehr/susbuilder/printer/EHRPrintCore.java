@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Properties;
 
 import net.sf.json.JSON;
@@ -31,6 +33,12 @@ import org.openehr.schemas.v1.VersionedCompositionDocument;
 import org.openehr.schemas.v1.VersionedEhrAccessDocument;
 import org.openehr.schemas.v1.VersionedEhrStatusDocument;
 
+import br.uerj.lampada.openehr.susbuilder.serializer.JsonExclusionStrategy;
+
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 /**
  * Class used to generate EHR objects and print in the available formats EHR:
  * XML and JSON Composition and Version: XML
@@ -42,12 +50,12 @@ public class EHRPrintCore {
 
 	private static String builderConfig = "builder.properties";
 
+	private static String JSON = "json";
 	private static Logger log = Logger.getLogger(EHRPrintCore.class);
+
 	private static boolean prettyPrint;
 
-	public static String JSON = "json";
-
-	public static String XML = "xml";
+	private static String XML = "xml";
 
 	static {
 		Properties props = new Properties();
@@ -69,100 +77,19 @@ public class EHRPrintCore {
 
 	private String outputFolder;
 
+	private XmlOptions xmlOptions;
+
 	public EHRPrintCore(String outputFolder, String format) {
 		this.outputFolder = outputFolder;
 
 		this.format = format;
-	}
 
-	/**
-	 * Write RM objects in the JSON format
-	 * 
-	 * @param obj
-	 * @param filename
-	 * @throws JsonGenerationException
-	 * @throws JsonMappingException
-	 * @throws IOException
-	 * @throws XMLBindingException
-	 */
-	protected void writeObjectToJSON(Object obj, String filename)
-			throws JsonGenerationException, JsonMappingException, IOException,
-			XMLBindingException {
-
-		File file = new File(filename);
-		// convert xml object into JSON (String)
-		JSON json = getJSONObject(getXMLObject(obj));
-
-		// TODO
-		// Did not manage to remove this prefixes using the API
-		// There is probably a more elegant solution
-		int identFactor = 0;
-		if (prettyPrint) {
-			identFactor = 2;
-		}
-		String jsonString = json.toString(identFactor)
-				.replaceAll("\"v1:", "\"").replaceAll("\"@", "\"");
-
-		FileUtils.writeStringToFile(file, jsonString);
-	}
-
-	/**
-	 * Write RM objects in the XML format
-	 * 
-	 * @param obj
-	 * @param filename
-	 * @throws XMLBindingException
-	 * @throws IOException
-	 */
-	protected void writeObjectToXML(Object obj, String filename)
-			throws XMLBindingException, IOException {
-		File file = new File(filename);
-		XmlObject xmlObj = getXMLObject(obj);
-
-		// Set XML generation options
-		XmlOptions xmlOptions = new XmlOptions();
+		this.xmlOptions = new XmlOptions();
 		if (prettyPrint) {
 			xmlOptions.setSavePrettyPrint();
 		}
 		xmlOptions.setSaveAggressiveNamespaces();
-		xmlOptions.setSaveOuter();
 		xmlOptions.setSaveInner();
-
-		if (xmlObj instanceof org.openehr.schemas.v1.EHR) {
-			EhrDocument doc = EhrDocument.Factory.newInstance();
-			doc.setEhr((org.openehr.schemas.v1.EHR) xmlObj);
-			doc.save(file, xmlOptions);
-		} else if (xmlObj instanceof VERSIONEDEHRACCESS) {
-			VersionedEhrAccessDocument doc = VersionedEhrAccessDocument.Factory
-					.newInstance();
-			doc.setVersionedEhrAccess((VERSIONEDEHRACCESS) xmlObj);
-			doc.save(file, xmlOptions);
-		} else if (xmlObj instanceof VERSIONEDEHRSTATUS) {
-			VersionedEhrStatusDocument doc = VersionedEhrStatusDocument.Factory
-					.newInstance();
-			doc.setVersionedEhrStatus((VERSIONEDEHRSTATUS) xmlObj);
-			doc.save(file, xmlOptions);
-		} else if (xmlObj instanceof VERSIONEDCOMPOSITION) {
-			VersionedCompositionDocument doc = VersionedCompositionDocument.Factory
-					.newInstance();
-			doc.setVersionedComposition((VERSIONEDCOMPOSITION) xmlObj);
-			doc.save(file, xmlOptions);
-		} else if (xmlObj instanceof CONTRIBUTION) {
-			ContributionDocument doc = ContributionDocument.Factory
-					.newInstance();
-			doc.setContribution((CONTRIBUTION) xmlObj);
-			doc.save(file, xmlOptions);
-		} else if (xmlObj instanceof COMPOSITION) {
-			CompositionDocument doc = CompositionDocument.Factory.newInstance();
-			doc.setComposition((COMPOSITION) xmlObj);
-			doc.save(file, xmlOptions);
-		} else if (xmlObj instanceof VERSION) {
-			VersionDocument doc = VersionDocument.Factory.newInstance();
-			doc.setVersion((VERSION) xmlObj);
-			doc.save(file, xmlOptions);
-		} else {
-			xmlObj.save(file, xmlOptions);
-		}
 	}
 
 	/**
@@ -223,26 +150,132 @@ public class EHRPrintCore {
 	}
 
 	/**
-	 * Generate a JSON object from a XML object
+	 * Write RM objects in the JSON format
 	 * 
-	 * @param xmlObj
-	 * @return
+	 * @param obj
+	 * @param filename
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
 	 * @throws XMLBindingException
 	 */
-	protected static JSON getJSONObject(XmlObject xmlObj)
-			throws XMLBindingException {
+	protected void writeObjectToJSON(Object obj, String filename)
+			throws JsonGenerationException, JsonMappingException, IOException,
+			XMLBindingException {
 
-		XMLSerializer xmlSerializer = new XMLSerializer();
+		File file = new File(filename);
+		// convert xml object into JSON (String)
+		XmlObject xmlObj = getXMLObject(obj);
 
-		// xmlSerializer.setSkipWhitespace(true);
-		xmlSerializer.setTypeHintsEnabled(false);
-		xmlSerializer.setNamespaceLenient(true);
-		xmlSerializer.setSkipNamespaces(true);
-		xmlSerializer.setRemoveNamespacePrefixFromElements(true);
-		xmlSerializer.setSkipNamespaces(true);
+		String doc = insertEhrObjType(xmlObj);
 
-		// convert String into Json
-		return xmlSerializer.read(xmlObj.toString());
+		JSON json = getJSONObject(doc);
+
+		// TODO
+		// Did not manage to remove this prefixes using the API
+		// There is probably a more elegant solution
+		int identFactor = 0;
+		if (prettyPrint) {
+			identFactor = 2;
+		}
+		String jsonString = json.toString(identFactor)
+				.replaceAll("\"v1:", "\"").replaceAll("\"@", "\"");
+
+		FileUtils.writeStringToFile(file, jsonString);
+	}
+
+	/**
+	 * Write RM objects in the XML format
+	 * 
+	 * @param obj
+	 * @param filename
+	 * @throws XMLBindingException
+	 * @throws IOException
+	 */
+	protected void writeObjectToXML(Object obj, String filename)
+			throws XMLBindingException, IOException {
+
+		File file = new File(filename);
+		XmlObject xmlObj = getXMLObject(obj);
+
+		String doc = insertEhrObjType(xmlObj);
+		if (doc != null) {
+			FileUtils.writeStringToFile(file, doc);
+		}
+	}
+
+	/**
+	 * 
+	 */
+
+	private String insertEhrObjType(XmlObject xmlObj) {
+
+		String xmlStr = null;
+
+		Date date = new Date();
+
+		XmlObject doc = null;
+		if (xmlObj instanceof org.openehr.schemas.v1.EHR) {
+			doc = EhrDocument.Factory.newInstance();
+			((EhrDocument) doc).setEhr((org.openehr.schemas.v1.EHR) xmlObj);
+		} else if (xmlObj instanceof VERSIONEDEHRACCESS) {
+			doc = VersionedEhrAccessDocument.Factory.newInstance();
+			((VersionedEhrAccessDocument) doc)
+					.setVersionedEhrAccess((VERSIONEDEHRACCESS) xmlObj);
+		} else if (xmlObj instanceof VERSIONEDEHRSTATUS) {
+			doc = VersionedEhrStatusDocument.Factory.newInstance();
+			((VersionedEhrStatusDocument) doc)
+					.setVersionedEhrStatus((VERSIONEDEHRSTATUS) xmlObj);
+		} else if (xmlObj instanceof VERSIONEDCOMPOSITION) {
+			doc = VersionedCompositionDocument.Factory.newInstance();
+			((VersionedCompositionDocument) doc)
+					.setVersionedComposition((VERSIONEDCOMPOSITION) xmlObj);
+		} else if (xmlObj instanceof CONTRIBUTION) {
+			doc = ContributionDocument.Factory.newInstance();
+			((ContributionDocument) doc).setContribution((CONTRIBUTION) xmlObj);
+		} else if (xmlObj instanceof COMPOSITION) {
+			doc = CompositionDocument.Factory.newInstance();
+			((CompositionDocument) doc).setComposition((COMPOSITION) xmlObj);
+		} else if (xmlObj instanceof VERSION) {
+			doc = VersionDocument.Factory.newInstance();
+			((VersionDocument) doc).setVersion((VERSION) xmlObj);
+		}
+
+		if (doc != null) {
+			xmlStr = doc.xmlText(xmlOptions);
+		} else {
+			log.error("[" + new Timestamp(date.getTime())
+					+ "] Unknow type of XML object: "
+					+ xmlObj.getClass().toString());
+		}
+
+		return xmlStr;
+	}
+
+	/**
+	 * Function to convert directly a RM object to JSON (without conversion to
+	 * XML)
+	 * 
+	 * TODO Implementation not working properly Exclusion strategy needs to be
+	 * fixed Some objects cannot be converted
+	 * 
+	 * @param obj
+	 * @param filename
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 * @throws XMLBindingException
+	 */
+	private void writeObjectToJSON2(Object obj, String filename)
+			throws JsonGenerationException, JsonMappingException, IOException,
+			XMLBindingException {
+		ExclusionStrategy excludeStrings = new JsonExclusionStrategy();
+		Gson gson = new GsonBuilder().setExclusionStrategies(excludeStrings)
+				.create();
+		// Gson gson = new Gson();
+		String json = gson.toJson(obj);
+		File file = new File(filename);
+		FileUtils.writeStringToFile(file, json);
 	}
 
 	/**
@@ -260,51 +293,25 @@ public class EHRPrintCore {
 		return xmlObj;
 	}
 
-	// private Object generateOpenEHRObjectFromExisting(String patientId,
-	// TemplateManager compositionObj, CompositionContent archContent,
-	// HashMap<String, Object> content) throws FlatteningException,
-	// Exception {
-	//
-	// archContent.updateContent(content);
-	// compositionObj.updateComposition(patientId, archContent);
-	// return compositionObj.getComposition();
-	// }
+	/**
+	 * Generate a JSON object from a XML object
+	 * 
+	 * @param xmlObj
+	 * @return
+	 * @throws XMLBindingException
+	 */
+	private static JSON getJSONObject(String xmlObj) throws XMLBindingException {
 
-	// public void run() {
-	// createPatientEHR();
-	// }
-	//
-	// @Override
-	// protected void compute() {
-	// // TODO Auto-generated method stub
-	//
-	// }
+		XMLSerializer xmlSerializer = new XMLSerializer();
 
-	// /**
-	// * Function to convert directly a RM object to JSON
-	// * (without conversion to XML)
-	// *
-	// * TODO
-	// * Implementation not working properly
-	// * Exclusion strategy needs to be fixed
-	// * Some objects cannot be converted
-	// *
-	// * @param obj
-	// * @param filename
-	// * @throws JsonGenerationException
-	// * @throws JsonMappingException
-	// * @throws IOException
-	// * @throws XMLBindingException
-	// */
-	// private void writeObjectToJSON2(Object obj, String filename)
-	// throws JsonGenerationException, JsonMappingException, IOException,
-	// XMLBindingException {
-	// ExclusionStrategy excludeStrings = new JsonExclusionStrategy();
-	// Gson gson = new GsonBuilder().setExclusionStrategies(excludeStrings)
-	// .create();
-	// // Gson gson = new Gson();
-	// String json = gson.toJson(obj);
-	// File file = new File(filename);
-	// FileUtils.writeStringToFile(file, json);
-	// }
+		// xmlSerializer.setSkipWhitespace(true);
+		xmlSerializer.setTypeHintsEnabled(false);
+		xmlSerializer.setNamespaceLenient(true);
+		xmlSerializer.setSkipNamespaces(true);
+		xmlSerializer.setRemoveNamespacePrefixFromElements(true);
+		xmlSerializer.setSkipNamespaces(true);
+
+		// convert String into Json
+		return xmlSerializer.read(xmlObj);
+	}
 }

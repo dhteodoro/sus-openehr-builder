@@ -1,0 +1,400 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-ADMIN_ENTRY.high_complexity_procedures_sus.v1
+
+concept
+	[at0000]	-- High complexity procedure authorisation
+language
+	original_language = <[ISO_639-1::pt-br]>
+	translations = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			author = <
+				["name"] = <"Sergio Miranda Freire">
+			>
+		>
+	>
+description
+	original_author = <
+		["name"] = <"Luciana Tricai Cavalini">
+		["organisation"] = <"Universidade do Estado do Rio de Janeiro">
+		["email"] = <"lutricav@lampada.uerj.br">
+		["date"] = <"04/11/2012">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the data for a high complexity procedure authorisation">
+			use = <"This is an archetype created for research purposes only">
+			misuse = <"It should not be use in any information system">
+			copyright = <"">
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Registro dos dados administrativos da APAC que não constavam do CKM">
+			use = <"Este é um arquétipo elaborado para fins de pesquisa e somente deve ser utilizado em seu âmbito">
+			misuse = <"Não deve ser utilizado em nenhum sistema de informação real. Outros projetos de pesquisa devem utilizá-lo após cuidadoso escrutínio.">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"Initial">
+	other_contributors = <"Sergio Miranda Freire", ...>
+	other_details = <
+		["references"] = <"Ministério da Saúde. Secretaria de Atenção à Saúde. Departamento de Regulação, Avaliação e Controle. Coordenação Geral de Sistemas de Informação. Autorização de Procedimento Ambulatorial (APAC): Manual de Operação do Sistema. Brasília 2009; Ministério da Saúde.">
+		["MD5-CAM-1.0.1"] = <"81F7DAF4B8B7D63C4625D9577CB3624B">
+	>
+
+definition
+	ADMIN_ENTRY[at0000] matches {	-- Hcpa 
+		data matches {
+			ITEM_TREE[at0001] matches {	-- Tree
+				items cardinality matches {0..*; unordered} matches {
+					CLUSTER[at0023] occurrences matches {0..1} matches {	-- General data
+						items cardinality matches {1..*; unordered} matches {
+							ELEMENT[at0009] occurrences matches {0..1} matches {	-- issue date 
+								value matches {
+									DV_DATE matches {*}
+								}
+							}
+							ELEMENT[at0010] occurrences matches {0..1} matches {	-- reason for encounter
+								value matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {[ac0001]}		-- New constraint
+									}
+								}
+							}
+							ELEMENT[at0011] occurrences matches {0..1} matches {	-- healthcare unit
+								value matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {[ac0002]}		-- New constraint
+									}
+								}
+							}
+							ELEMENT[at0028] occurrences matches {0..1} matches {	-- state
+								value matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {[ac0003]}		-- New constraint
+									}
+								}
+							}
+							ELEMENT[at0012] occurrences matches {0..1} matches {	-- patient age
+								value matches {
+									DV_COUNT matches {*}
+								}
+							}
+						}
+					}
+					CLUSTER[at0016] occurrences matches {0..1} matches {	-- chemotherapy
+						items cardinality matches {1..*; unordered} matches {
+							ELEMENT[at0013] occurrences matches {0..1} matches {	-- duration of treatment
+								value matches {
+									DV_COUNT matches {*}
+								}
+							}
+							ELEMENT[at0014] occurrences matches {0..1} matches {	-- schema 1
+								value matches {
+									DV_TEXT matches {*}
+								}
+							}
+							ELEMENT[at0015] occurrences matches {0..1} matches {	-- schema 2
+								value matches {
+									DV_TEXT matches {*}
+								}
+							}
+							ELEMENT[at0031] occurrences matches {0..1} matches {	-- date of begin of treatment
+								value matches {
+									DV_DATE matches {
+										value matches {yyyy-mm-dd}
+									}
+								}
+							}
+						}
+					}
+					CLUSTER[at0017] occurrences matches {0..1} matches {	-- radiotherapy
+						items cardinality matches {1..*; unordered} matches {
+							ELEMENT[at0032] occurrences matches {0..1} matches {	-- date of begin of treatment
+								value matches {
+									DV_DATE matches {
+										value matches {yyyy-mm-dd}
+									}
+								}
+							}
+						}
+					}
+					CLUSTER[at0018] occurrences matches {0..1} matches {	-- transplantation
+						items cardinality matches {1..*; unordered} matches {
+							ELEMENT[at0029] occurrences matches {0..1} matches {	-- indicator of transplantation
+								value matches {
+									DV_BOOLEAN matches {
+										value matches {True, False}
+									}
+								}
+							}
+							ELEMENT[at0021] occurrences matches {0..1} matches {	-- enrolled for transplantation
+								value matches {
+									DV_BOOLEAN matches {
+										value matches {True, False}
+									}
+								}
+							}
+							ELEMENT[at0022] occurrences matches {0..1} matches {	-- number of transplantations
+								value matches {
+									DV_COUNT matches {*}
+								}
+							}
+						}
+					}
+					CLUSTER[at0025] occurrences matches {0..1} matches {	-- renal therapy
+						items cardinality matches {1..*; unordered} matches {
+							ELEMENT[at0026] occurrences matches {0..1} matches {	-- abdominal ultrasonography
+								value matches {
+									DV_BOOLEAN matches {
+										value matches {True, False}
+									}
+								}
+							}
+							ELEMENT[at0030] occurrences matches {0..1} matches {	-- date of first dialysis
+								value matches {
+									DV_DATE matches {*}
+								}
+							}
+							ELEMENT[at0027] occurrences matches {0..1} matches {	-- venous fistula amount
+								value matches {
+									DV_COUNT matches {*}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Hcpa">
+					description = <"Authorisation for high complexity procedures">
+				>
+				["at0001"] = <
+					text = <"components">
+					description = <"high complexity procedure authorisation components">
+				>
+				["at0009"] = <
+					text = <"issue date">
+					description = <"Hcpa issue date">
+				>
+				["at0010"] = <
+					text = <"reason for encounter">
+					description = <"Reason for encounter according to a Brazilian standard">
+				>
+				["at0011"] = <
+					text = <"healthcare unit">
+					description = <"healthcare unit code">
+				>
+				["at0012"] = <
+					text = <"patient age">
+					description = <"patient age">
+				>
+				["at0013"] = <
+					text = <"duration of treatment">
+					description = <"duration of treatment">
+				>
+				["at0014"] = <
+					text = <"schema 1">
+					description = <"schema 1">
+				>
+				["at0015"] = <
+					text = <"schema 2">
+					description = <"schema 2">
+				>
+				["at0016"] = <
+					text = <"chemotherapy">
+					description = <"chemotherapy">
+				>
+				["at0017"] = <
+					text = <"radiotherapy">
+					description = <"radiotherapy">
+				>
+				["at0018"] = <
+					text = <"transplantation">
+					description = <"transplantation">
+				>
+				["at0021"] = <
+					text = <"enrolled for transplantation">
+					description = <"enrolled for transplantation">
+				>
+				["at0022"] = <
+					text = <"number of transplantations">
+					description = <"number of transplantations">
+				>
+				["at0023"] = <
+					text = <"General data">
+					description = <"General data">
+				>
+				["at0025"] = <
+					text = <"renal therapy">
+					description = <"renal therapy">
+				>
+				["at0026"] = <
+					text = <"abdominal ultrasonography">
+					description = <"abdominal ultrasonography">
+				>
+				["at0027"] = <
+					text = <"venous fistula amount">
+					description = <"venous fistula amount">
+				>
+				["at0028"] = <
+					text = <"State">
+					description = <"State">
+				>
+				["at0029"] = <
+					text = <"indicator of transplantation">
+					description = <"indicator of transplantation">
+				>
+				["at0030"] = <
+					text = <"date of first dialysis">
+					description = <"date of first dialysis">
+				>
+				["at0031"] = <
+					text = <"date of beginning of chemotherapy">
+					description = <"date of beginning of chemotherapy">
+				>
+				["at0032"] = <
+					text = <"date of beginning of radiotherapy">
+					description = <"date of beginning of radiotherapy">
+				>
+			>
+		>
+		["pt-br"] = <
+			items = <
+				["at0000"] = <
+					text = <"Apac">
+					description = <"Autorização de Procedimentos de Alta Complexidade (APAC)">
+				>
+				["at0001"] = <
+					text = <"componentes da Apac">
+					description = <"componentes da Apac">
+				>
+				["at0009"] = <
+					text = <"data de emissão">
+					description = <"data de emissão">
+				>
+				["at0010"] = <
+					text = <"razão para a apac">
+					description = <"De acordo com os códigos da Portaria 04/99">
+				>
+				["at0011"] = <
+					text = <"unidade de saúde">
+					description = <"unidade de saúde">
+				>
+				["at0012"] = <
+					text = <"idade do paciente">
+					description = <"idade do paciente">
+				>
+				["at0013"] = <
+					text = <"duração do tratamento">
+					description = <"duração do tratamento">
+				>
+				["at0014"] = <
+					text = <"esquema 1">
+					description = <"esquema 1">
+				>
+				["at0015"] = <
+					text = <"esquema 2">
+					description = <"esquema 2">
+				>
+				["at0016"] = <
+					text = <"quimioterapia">
+					description = <"quimioterapia">
+				>
+				["at0017"] = <
+					text = <"radioterapia">
+					description = <"radioterapia">
+				>
+				["at0018"] = <
+					text = <"transplante">
+					description = <"transplante">
+				>
+				["at0021"] = <
+					text = <"Inscrito na lista da CNCDO">
+					description = <"Inscrito na lista da CNCDO">
+				>
+				["at0022"] = <
+					text = <"quantidade de transplantes">
+					description = <"quantidade de transplantes">
+				>
+				["at0023"] = <
+					text = <"dados gerais">
+					description = <"dados gerais">
+				>
+				["at0025"] = <
+					text = <"terapia renal">
+					description = <"terapia renal">
+				>
+				["at0026"] = <
+					text = <"ultrasonografia abdominal">
+					description = <"ultrasonografia abdominal">
+				>
+				["at0027"] = <
+					text = <"Quantidade de intervenção de Fistola">
+					description = <"Quantidade de intervenção de Fistola">
+				>
+				["at0028"] = <
+					text = <"Estado">
+					description = <"Estado">
+				>
+				["at0029"] = <
+					text = <"indicador de transplante">
+					description = <"indicador se o paciente realizou transplante">
+				>
+				["at0030"] = <
+					text = <"data da primeira diálise">
+					description = <"data da primeira diálise">
+				>
+				["at0031"] = <
+					text = <"data de início da quimioterapia">
+					description = <"data de início da quimioterapia">
+				>
+				["at0032"] = <
+					text = <"data de início da radioterapia">
+					description = <"data de início da radioterapia">
+				>
+			>
+		>
+	>
+	constraint_definitions = <
+		["en"] = <
+			items = <
+				["ac0001"] = <
+					text = <"code for reason of encounter">
+					description = <"code for reason of encounter">
+				>
+				["ac0002"] = <
+					text = <"healthcare unit code">
+					description = <"healthcare unit code">
+				>
+				["ac0003"] = <
+					text = <"State code">
+					description = <"State code">
+				>
+			>
+		>
+		["pt-br"] = <
+			items = <
+				["ac0001"] = <
+					text = <"código para a razão para a apac">
+					description = <"código para a razão para a apac">
+				>
+				["ac0002"] = <
+					text = <"código da unidade de saúde">
+					description = <"código da unidade de saúde">
+				>
+				["ac0003"] = <
+					text = <"código da unidade da federação">
+					description = <"código da unidade da federação">
+				>
+			>
+		>
+	>

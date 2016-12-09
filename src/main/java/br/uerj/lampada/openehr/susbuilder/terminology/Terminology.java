@@ -6,12 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.keyvalue.MultiKey;
-import org.apache.commons.collections.map.MultiKeyMap;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.openehr.rm.datatypes.text.CodePhrase;
@@ -25,20 +24,10 @@ public class Terminology {
 	private static final String UTF8 = "UTF-8";
 
 	// in-memory representation as [terminology name, code, text]
-	private MultiKeyMap terminology;
+	private Map<String, String> terminology;
 
 	public Terminology() {
-		terminology = new MultiKeyMap();
-	}
-
-	/**
-	 * Parses given lines and loads a terminology
-	 * 
-	 * @param lines
-	 * @return
-	 */
-	private void fromLines(List<String> lines) {
-		addAll(lines);
+		terminology = new HashMap<String, String>();
 	}
 
 	/**
@@ -102,7 +91,7 @@ public class Terminology {
 		// text);
 		// }
 
-		terminology.put(name, code, text);
+		terminology.put(name + "" + DELIMITER + "" + code, text);
 	}
 
 	/**
@@ -127,7 +116,7 @@ public class Terminology {
 	 * 
 	 * @return
 	 */
-	public Map<String, Map<String, Map<String, String>>> getTerminology() {
+	public Map<String, String> getTerminology() {
 		return terminology;
 	}
 
@@ -168,7 +157,8 @@ public class Terminology {
 	 * @return null if not found
 	 */
 	public String getText(String name, String code) {
-		String text = (String) terminology.get(name, code);
+		String text = (String) terminology.get(name + "" + DELIMITER + ""
+				+ code);
 
 		// log.debug("Retrieved text '" + text + "' for [" + terminology + "::"
 		// + code + "] ");
@@ -217,17 +207,13 @@ public class Terminology {
 	public void writeTerminology(String filename) throws IOException {
 		StringBuffer buf = new StringBuffer();
 
-		Iterator<MultiKey> it = terminology.mapIterator();
+		Iterator<String> it = terminology.keySet().iterator();
 
 		while (it.hasNext()) {
-			MultiKey obj = it.next();
-			String name = (String) obj.getKey(0);
-			String code = (String) obj.getKey(1);
-			String text = (String) terminology.get(obj);
+			String name_code = it.next();
+			String text = (String) terminology.get(name_code);
 
-			buf.append(name);
-			buf.append(DELIMITER);
-			buf.append(code);
+			buf.append(name_code);
 			buf.append(DELIMITER);
 			buf.append(text);
 			if (it.hasNext()) {
@@ -237,5 +223,15 @@ public class Terminology {
 		File termFile = new File(filename);
 		FileUtils.deleteQuietly(termFile);
 		FileUtils.writeStringToFile(termFile, buf.toString(), UTF8);
+	}
+
+	/**
+	 * Parses given lines and loads a terminology
+	 * 
+	 * @param lines
+	 * @return
+	 */
+	private void fromLines(List<String> lines) {
+		addAll(lines);
 	}
 }

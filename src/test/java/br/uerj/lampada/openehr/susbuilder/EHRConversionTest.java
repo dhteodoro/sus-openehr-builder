@@ -41,14 +41,104 @@ import br.uerj.lampada.openehr.susbuilder.printer.EHRPrintCore;
  */
 public class EHRConversionTest extends CompositionTestBase {
 
+	private EHRBuilder builder;
 	private List<Composition> compositions;
-	
+	private XmlOptions xmlOptions;
+
 	/**
 	 * @param name
 	 * @throws Exception
 	 */
 	public EHRConversionTest(String name) throws Exception {
 		super(name);
+	}
+
+	/**
+	 * Test method for
+	 * {@link br.uerj.lampada.openehr.susbuilder.builder.EHRBuilder#susOpenEHR(java.lang.String, java.lang.String, java.util.List)}
+	 * .
+	 * 
+	 * @throws Exception
+	 */
+	public void testSusOpenEHR() throws Exception {
+		String uuid = "1.2.3.4.5";
+		String patientId = "1.1.1." + uuid;
+		assertNotNull(builder.getEhr());
+		assertEquals(patientId, builder.getEhr().getEhrId().getValue());
+	}
+
+	public void testXMLCompositionConversion() throws Exception {
+
+		List<VersionedComposition> vc = builder.getVersionedCompositions();
+		for (int i = 0; i < vc.size(); i++) {
+			XmlObject xmlObj = EHRPrintCore.getXMLObject(vc.get(i));
+
+			File file = new File("./test/ehr/conversion/composition_" + (i + 1)
+					+ ".xml");
+			VersionedCompositionDocument doc = VersionedCompositionDocument.Factory
+					.newInstance();
+			doc.setVersionedComposition((VERSIONEDCOMPOSITION) xmlObj);
+			doc.save(file, xmlOptions);
+
+			assertNotNull(xmlObj);
+		}
+	}
+
+	public void testXMLContributionConversion() throws Exception {
+
+		List<Contribution> vc = builder.getContributions();
+		for (int i = 0; i < vc.size(); i++) {
+			XmlObject xmlObj = EHRPrintCore.getXMLObject(vc.get(i));
+
+			File file = new File("./test/ehr/conversion/contribution_"
+					+ (i + 1) + ".xml");
+			ContributionDocument doc = ContributionDocument.Factory
+					.newInstance();
+			doc.setContribution((CONTRIBUTION) xmlObj);
+			doc.save(file, xmlOptions);
+
+			assertNotNull(xmlObj);
+		}
+	}
+
+	public void testXMLEHRAccessConversion() throws Exception {
+
+		XmlObject xmlObj = EHRPrintCore.getXMLObject(builder
+				.getVersionedEHRAccess());
+
+		File file = new File("./test/ehr/conversion/ehrAccess.xml");
+		VersionedEhrAccessDocument doc = VersionedEhrAccessDocument.Factory
+				.newInstance();
+		doc.setVersionedEhrAccess((VERSIONEDEHRACCESS) xmlObj);
+		doc.save(file, xmlOptions);
+
+		assertNotNull(xmlObj);
+	}
+
+	public void testXMLEHRConversion() throws Exception {
+
+		XmlObject xmlObj = EHRPrintCore.getXMLObject(builder.getEhr());
+
+		File file = new File("./test/ehr/conversion/ehr.xml");
+		EhrDocument doc = EhrDocument.Factory.newInstance();
+		doc.setEhr((org.openehr.schemas.v1.EHR) xmlObj);
+		doc.save(file, xmlOptions);
+
+		assertNotNull(xmlObj);
+	}
+
+	public void testXMLEHRStatusConversion() throws Exception {
+
+		XmlObject xmlObj = EHRPrintCore.getXMLObject(builder
+				.getVersionedEHRStatus());
+
+		File file = new File("./test/ehr/conversion/ehrStatus.xml");
+		VersionedEhrStatusDocument doc = VersionedEhrStatusDocument.Factory
+				.newInstance();
+		doc.setVersionedEhrStatus((VERSIONEDEHRSTATUS) xmlObj);
+		doc.save(file, xmlOptions);
+
+		assertNotNull(xmlObj);
 	}
 
 	/*
@@ -76,6 +166,16 @@ public class EHRConversionTest extends CompositionTestBase {
 					category, territory(), ts);
 			compositions.add(composition);
 		}
+
+		String uuid = "1.2.3.4.5";
+		String patientId = "1.1.1." + uuid;
+		builder = new EHRBuilder(patientId, uuid, compositions);
+		builder.createEHRObj();
+
+		xmlOptions = new XmlOptions();
+		xmlOptions.setSavePrettyPrint();
+		xmlOptions.setSaveAggressiveNamespaces();
+		xmlOptions.setSaveInner();
 	}
 
 	/*
@@ -86,151 +186,5 @@ public class EHRConversionTest extends CompositionTestBase {
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-	}
-
-	/**
-	 * Test method for
-	 * {@link br.uerj.lampada.openehr.susbuilder.builder.EHRBuilder#susOpenEHR(java.lang.String, java.lang.String, java.util.List)}
-	 * .
-	 * 
-	 * @throws Exception
-	 */
-	public void testSusOpenEHR() throws Exception {
-		String uuid = "1.2.3.4.5";
-		String patientId = "1.1.1." + uuid;
-		EHRBuilder pc = new EHRBuilder(patientId, uuid, compositions);
-
-		assertNotNull(pc.getEhr());
-		assertEquals(patientId, pc.getEhr().getEhrId().getValue());
-	}
-
-	public void testXMLCompositionConversion() throws Exception {
-		String uuid = "1.2.3.4.5";
-		String patientId = "1.1.1." + uuid;
-		EHRBuilder pc = new EHRBuilder(patientId, uuid, compositions);
-
-		List<VersionedComposition> vc = pc.getVersionedCompositions();
-		for (int i = 0; i < vc.size(); i++) {
-			XmlObject xmlObj = EHRPrintCore.getXMLObject(vc.get(i));
-			XmlOptions xmlOptions = new XmlOptions();
-			xmlOptions.setSavePrettyPrint();
-			xmlOptions.setSaveAggressiveNamespaces();
-			xmlOptions.setSaveOuter();
-			xmlOptions.setSaveInner();
-
-			File file = new File("./ehr/composition_" + (i + 1) + ".xml");
-			if (xmlObj instanceof VERSIONEDCOMPOSITION) {
-				VersionedCompositionDocument doc = VersionedCompositionDocument.Factory
-						.newInstance();
-				doc.setVersionedComposition((VERSIONEDCOMPOSITION) xmlObj);
-				doc.save(file, xmlOptions);
-			} else {
-				xmlObj.save(file, xmlOptions);
-			}
-			assertNotNull(xmlObj);
-		}
-	}
-
-	public void testXMLContributionConversion() throws Exception {
-		String uuid = "1.2.3.4.5";
-		String patientId = "1.1.1." + uuid;
-		EHRBuilder pc = new EHRBuilder(patientId, uuid, compositions);
-
-		List<Contribution> vc = pc.getContributions();
-		for (int i = 0; i < vc.size(); i++) {
-			XmlObject xmlObj = EHRPrintCore.getXMLObject(vc.get(i));
-			XmlOptions xmlOptions = new XmlOptions();
-			xmlOptions.setSavePrettyPrint();
-			xmlOptions.setSaveAggressiveNamespaces();
-			xmlOptions.setSaveOuter();
-			xmlOptions.setSaveInner();
-
-			File file = new File("./ehr/contribution_" + (i + 1) + ".xml");
-			if (xmlObj instanceof CONTRIBUTION) {
-				ContributionDocument doc = ContributionDocument.Factory
-						.newInstance();
-				doc.setContribution((CONTRIBUTION) xmlObj);
-				doc.save(file, xmlOptions);
-			} else {
-				xmlObj.save(file, xmlOptions);
-			}
-
-			assertNotNull(xmlObj);
-		}
-	}
-
-	public void testXMLEHRAccessConversion() throws Exception {
-		String uuid = "1.2.3.4.5";
-		String patientId = "1.1.1." + uuid;
-		EHRBuilder pc = new EHRBuilder(patientId, uuid, compositions);
-
-		XmlObject xmlObj = EHRPrintCore.getXMLObject(pc.getVersionedEHRAccess());
-		XmlOptions xmlOptions = new XmlOptions();
-		xmlOptions.setSavePrettyPrint();
-		xmlOptions.setSaveAggressiveNamespaces();
-		xmlOptions.setSaveOuter();
-		xmlOptions.setSaveInner();
-
-		File file = new File("./ehr/ehrAccess.xml");
-		if (xmlObj instanceof VERSIONEDEHRACCESS) {
-			VersionedEhrAccessDocument doc = VersionedEhrAccessDocument.Factory
-					.newInstance();
-			doc.setVersionedEhrAccess((VERSIONEDEHRACCESS) xmlObj);
-			doc.save(file, xmlOptions);
-		} else {
-			xmlObj.save(file, xmlOptions);
-		}
-
-		assertNotNull(xmlObj);
-	}
-
-	public void testXMLEHRConversion() throws Exception {
-
-		String uuid = "1.2.3.4.5";
-		String patientId = "1.1.1." + uuid;
-		EHRBuilder pc = new EHRBuilder(patientId, uuid, compositions);
-
-		XmlObject xmlObj = EHRPrintCore.getXMLObject(pc.getEhr());
-		XmlOptions xmlOptions = new XmlOptions();
-		xmlOptions.setSavePrettyPrint();
-		xmlOptions.setSaveAggressiveNamespaces();
-		xmlOptions.setSaveOuter();
-		xmlOptions.setSaveInner();
-
-		File file = new File("./ehr/ehr.xml");
-		if (xmlObj instanceof org.openehr.schemas.v1.EHR) {
-			EhrDocument doc = EhrDocument.Factory.newInstance();
-			doc.setEhr((org.openehr.schemas.v1.EHR) xmlObj);
-			doc.save(file, xmlOptions);
-		} else {
-			xmlObj.save(file, xmlOptions);
-		}
-
-		assertNotNull(xmlObj);
-	}
-
-	public void testXMLEHRStatusConversion() throws Exception {
-		String uuid = "1.2.3.4.5";
-		String patientId = "1.1.1." + uuid;
-		EHRBuilder pc = new EHRBuilder(patientId, uuid, compositions);
-
-		XmlObject xmlObj = EHRPrintCore.getXMLObject(pc.getVersionedEHRStatus());
-		XmlOptions xmlOptions = new XmlOptions();
-		xmlOptions.setSavePrettyPrint();
-		xmlOptions.setSaveAggressiveNamespaces();
-		xmlOptions.setSaveOuter();
-		xmlOptions.setSaveInner();
-
-		File file = new File("./ehr/ehrStatus.xml");
-		if (xmlObj instanceof VERSIONEDEHRSTATUS) {
-			VersionedEhrStatusDocument doc = VersionedEhrStatusDocument.Factory
-					.newInstance();
-			doc.setVersionedEhrStatus((VERSIONEDEHRSTATUS) xmlObj);
-			doc.save(file, xmlOptions);
-		} else {
-			xmlObj.save(file, xmlOptions);
-		}
-
-		assertNotNull(xmlObj);
 	}
 }

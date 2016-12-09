@@ -2,6 +2,7 @@ package br.uerj.lampada.openehr.susbuilder.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,21 +15,21 @@ import org.apache.log4j.Logger;
  */
 public class DBHandler {
 
-	private static Connection connection;
+	public final static String MYSQL = "mysql";
 
+	public final static String MYSQL_CLASS = "com.mysql.jdbc.Driver";
+	public final static String ORACLE = "oracle";
+
+	public final static String ORACLE_CLASS = "oracle.jdbc.driver.OracleDriver";
+	public final static String POSTGRESQL = "postgresql";
+
+	public final static String POSTGRESQL_CLASS = "org.postgresql.Driver";
+	public final static String SQLSERVER = "sqlserver";
+
+	public final static String SQLSERVER_CLASS = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 	private static Logger log = Logger.getLogger(DBHandler.class);
 
-	public final static String MYSQL = "mysql";
-	public final static String MYSQL_CLASS = "com.mysql.jdbc.Driver";
-
-	public final static String ORACLE = "oracle";
-	public final static String ORACLE_CLASS = "oracle.jdbc.driver.OracleDriver";
-
-	public final static String POSTGRESQL = "postgresql";
-	public final static String POSTGRESQL_CLASS = "org.postgresql.Driver";
-
-	public final static String SQLSERVER = "sqlserver";
-	public final static String SQLSERVER_CLASS = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+	private Connection connection;
 
 	private String dbUrl;
 
@@ -76,7 +77,7 @@ public class DBHandler {
 						password);
 			}
 		} catch (Exception e) {
-			log.error("Cannot connect to database: "+ e.getMessage());
+			log.error("Cannot connect to database: " + e.getMessage());
 		}
 	}
 
@@ -150,22 +151,55 @@ public class DBHandler {
 		return username;
 	}
 
-	public ResultSet runQuery(String sql) throws SQLException {
+	public ResultSet runQuery() throws Exception {
+		return runQuery(sql);
+	}
+
+	public ResultSet runQuery(PreparedStatement st) throws Exception {
 		ResultSet result = null;
 		log.debug("Running query...");
 		log.debug(sql);
+		long startTime = System.currentTimeMillis();
 		try {
-			long startTime = System.currentTimeMillis();
-			connect();
+			st.execute();
+			result = st.getResultSet();
+		} catch (Exception e) {
+			try {
+				connect();
+				st.execute();
+				result = st.getResultSet();
+			} catch (Exception e2) {
+				log.error("Cannot execute query: " + sql);
+				throw e2;
+			}
+		}
+		log.debug("Query time: " + (System.currentTimeMillis() - startTime)
+				+ " ms");
+		return result;
+	}
+
+	public ResultSet runQuery(String sql) throws Exception {
+		ResultSet result = null;
+		log.debug("Running query...");
+		log.debug(sql);
+		long startTime = System.currentTimeMillis();
+		try {
 			Statement statement = connection.createStatement();
 			statement.execute(sql);
 			result = statement.getResultSet();
-			log.debug("Query time: " + (System.currentTimeMillis() - startTime)
-					+ " ms");
 		} catch (SQLException e) {
-			log.error("Cannot execute query: "+ sql);
-			throw e;
+			try {
+				connect();
+				Statement statement = connection.createStatement();
+				statement.execute(sql);
+				result = statement.getResultSet();
+			} catch (Exception e2) {
+				log.error("Cannot execute query: " + sql);
+				throw e2;
+			}
 		}
+		log.debug("Query time: " + (System.currentTimeMillis() - startTime)
+				+ " ms");
 		return result;
 	}
 
