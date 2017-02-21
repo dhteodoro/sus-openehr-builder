@@ -12,8 +12,7 @@ public class ReadTerminologyTest extends TestCase {
 	public void testReadTerminology() throws Exception {
 
 		Properties props = new Properties();
-		props.load(ReadTerminologyTest.class
-				.getResourceAsStream(Constants.builderConfig));
+		props.load(new FileInputStream(Constants.builderConfig));
 
 		String terminologyFile = props.getProperty("terminology.file");
 
@@ -25,8 +24,7 @@ public class ReadTerminologyTest extends TestCase {
 
 	public void testWriteTerminology() throws Exception {
 		Properties props = new Properties();
-		props.load(ReadTerminologyTest.class
-				.getResourceAsStream(Constants.builderConfig));
+		props.load(new FileInputStream(Constants.builderConfig));
 
 		String terminologyFile = props.getProperty("terminology.file");
 

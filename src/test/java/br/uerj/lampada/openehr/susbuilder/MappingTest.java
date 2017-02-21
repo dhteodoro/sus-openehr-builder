@@ -1,5 +1,6 @@
 package br.uerj.lampada.openehr.susbuilder;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -99,8 +100,7 @@ public class MappingTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		Properties props = new Properties();
-		props.load(MappingTest.class
-				.getResourceAsStream(Constants.builderConfig));
+		props.load(new FileInputStream(Constants.builderConfig));
 
 		String url = props.getProperty("db.url");
 		String username = props.getProperty("db.username");

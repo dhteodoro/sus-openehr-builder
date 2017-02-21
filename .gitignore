@@ -1,4 +1,5 @@
 target.zip
 builder.properties.priv
+builder.properties.bac
 target/
 .DS_Store

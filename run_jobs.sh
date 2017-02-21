@@ -70,9 +70,9 @@ fi
 #echo "format: $OUT_TYPE"
 #echo "aih: $COM_TYPE"
 
-#iostat -nhdcmxt 60 > "iostat.load" &
+iostat -nhdcmxt 60 > "iostat.load" &
 
-/home/douglas/software/collectl/usr/bin/collectl -sCDN -oD -i 60 --nohup > "collectl.load" 2> "collectl.err" &
+#collectl -sCDN -oD -i 60 --nohup > "collectl.load" 2> "collectl.err" &
 
 if [ "$(ls -A $PAT_DIR)" ]; then
  echo "[`date`] Processing files..."
@@ -88,7 +88,7 @@ if [ "$(ls -A $PAT_DIR)" ]; then
   #echo "patients: $PAT_DIR/$f"
   #echo "ehr dir: $OUT_DIR/$COUNT"
 
-  java -Dfile.encoding=UTF-8 -cp uber-sus-openehr-builder-1.0.1-SNAPSHOT.jar br.uerj.lampada.openehr.susbuilder.EHRGenerator --type $EHR_OBJ --format $OUT_TYPE --patients "$PAT_DIR/$f" --ehr-dir "$OUT_DIR/$COUNT" $COM_TYPE > "out_"$COUNT".log" 2> "out_"$COUNT".err"  &
+  java -Dfile.encoding=UTF-8 -cp bin/uber-sus-openehr-builder-1.0.1-SNAPSHOT.jar br.uerj.lampada.openehr.susbuilder.EHRGenerator --type $EHR_OBJ --format $OUT_TYPE --patients "$PAT_DIR/$f" --ehr-dir "$OUT_DIR/$COUNT" $COM_TYPE > "out_"$COUNT".log" 2> "out_"$COUNT".err"  &
 
   COUNT=$(($COUNT + 1))
  done

@@ -1,5 +1,7 @@
 package br.uerj.lampada.openehr.susbuilder;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -51,8 +53,7 @@ public class ReadInstanceTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		Properties props = new Properties();
-		props.load(ReadInstanceTest.class
-				.getResourceAsStream(Constants.builderConfig));
+		props.load(new FileInputStream(Constants.builderConfig));
 
 		dbUrl = props.getProperty("db.url");
 		username = props.getProperty("db.username");

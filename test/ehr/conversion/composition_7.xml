@@ -11,7 +11,7 @@
     <v1:type>EHR</v1:type>
   </v1:owner_id>
   <v1:time_created>
-    <v1:value>2017-02-21T14:53:18,373</v1:value>
+    <v1:value>2017-02-21T16:44:59,456</v1:value>
   </v1:time_created>
   <v1:versions>
     <v1:contribution>
@@ -27,7 +27,7 @@
         <v1:name>UERJ SUS OpenEHR Builder</v1:name>
       </v1:committer>
       <v1:time_committed>
-        <v1:value>2017-02-21T14:53:18,374</v1:value>
+        <v1:value>2017-02-21T16:44:59,456</v1:value>
       </v1:time_committed>
       <v1:change_type>
         <v1:value>creation</v1:value>
