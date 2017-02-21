@@ -6,12 +6,13 @@
 	<artifactId>sus-openehr-builder</artifactId>
 	<packaging>jar</packaging>
 	<name>SUS openEHR Builder</name>
-	<description>Create SUS openEHR records from the AIH/APAC  databases</description>
+	<description>Create openEHR records from the SUS AIH/APAC databases</description>
 	<build>
 		<plugins>
-			<plugin>
+			<plugin>			
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
+        		<version>2.4.3</version>				
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -45,7 +46,87 @@
       		</plugin>
 		</plugins>
 	</build>
+	<properties>
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    	<maven.test.skip>true</maven.test.skip>    	
+  	</properties>	
+	<repositories>
+    <!--other repositories if any-->
+    	<repository>
+        	<id>project.local</id>
+        	<name>openehr-update</name>
+        	<url>file:${project.basedir}/lib</url>
+    	</repository>
+	</repositories>
 	<dependencies>
+		<dependency>
+    		<groupId>org.openehr</groupId>
+    		<artifactId>adl-parser</artifactId>
+    		<version>1.0.3</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.openehr</groupId>
+    		<artifactId>adl-serializer</artifactId>
+    		<version>1.0.3</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.openehr</groupId>
+    		<artifactId>measure-serv</artifactId>
+    		<version>1.0.3</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.openehr</groupId>
+    		<artifactId>mini-termserv</artifactId>
+    		<version>1.0.3</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.openehr</groupId>
+    		<artifactId>oet-parser</artifactId>
+    		<version>1.0.3</version>
+		</dependency>		<dependency>
+    		<groupId>org.openehr</groupId>
+    		<artifactId>openehr-aom</artifactId>
+    		<version>1.0.3</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.openehr</groupId>
+    		<artifactId>openehr-ap</artifactId>
+    		<version>1.0.3</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.openehr</groupId>
+    		<artifactId>openehr-rm-core</artifactId>
+    		<version>1.0.3</version>
+		</dependency>		<dependency>
+    		<groupId>org.openehr</groupId>
+    		<artifactId>openehr-rm-domain</artifactId>
+    		<version>1.0.3</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.openehr</groupId>
+    		<artifactId>rm-builder</artifactId>
+    		<version>1.0.3</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.openehr</groupId>
+    		<artifactId>rm-skeleton</artifactId>
+    		<version>1.0.3</version>
+		</dependency>		
+		<dependency>
+    		<groupId>org.openehr</groupId>
+    		<artifactId>xml-binding</artifactId>
+    		<version>1.0.3</version>
+		</dependency>		
+		<dependency>
+    		<groupId>org.openehr</groupId>
+    		<artifactId>xml-serializer</artifactId>
+    		<version>1.0.3</version>
+		</dependency>	
+		<dependency>
+		    <groupId>javax.measure</groupId>
+		    <artifactId>jsr-275</artifactId>
+		    <version>0.9.2</version>
+		</dependency>		
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>

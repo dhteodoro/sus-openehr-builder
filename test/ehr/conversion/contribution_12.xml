@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <v1:contribution xmlns:v1="http://schemas.openehr.org/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <v1:uid xsi:type="v1:HIER_OBJECT_ID">
+  <v1:uid>
     <v1:value>1.3.12.1.2.3.4.5</v1:value>
   </v1:uid>
   <v1:versions>
@@ -16,7 +16,7 @@
       <v1:name>UERJ SUS OpenEHR Builder</v1:name>
     </v1:committer>
     <v1:time_committed>
-      <v1:value>2014-05-26T18:22:15,152</v1:value>
+      <v1:value>2017-02-21T14:53:23,190</v1:value>
     </v1:time_committed>
     <v1:change_type>
       <v1:value>creation</v1:value>
